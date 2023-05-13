@@ -1,4 +1,4 @@
-import 'package:campus_go/presentation/pages/home_page.dart';
+import 'package:campus_go/presentation/pages/login_page.dart';
 import 'package:campus_go/presentation/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +11,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      routes: {
+        "/LoginPage": (context) => const LoginPage(),
+        "/RegistrationPage": (context) => const RegistrationPage()
+      },
       debugShowCheckedModeBanner: false,
-      home: RegistrationPage(),
+      home: const LoginPage(),
     );
   }
 }
