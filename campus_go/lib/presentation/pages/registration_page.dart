@@ -2,8 +2,6 @@ import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:campus_go/widgets/registration_page_widgets/register_pic.dart';
 import 'package:campus_go/widgets/registration_page_widgets/register_text.dart';
-import 'package:campus_go/widgets/registration_page_widgets/register_textformfield.dart';
-import 'package:campus_go/widgets/registration_page_widgets/register_signup_button.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -14,6 +12,10 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final nameTextController = TextEditingController();
+  final mailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final repasswordTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final myHeightSizedBox = SizedBox(
@@ -21,6 +23,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -39,7 +42,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
-            child: const RegisterTextFormField(label: 'Your name here'),
+            child: textFormField('Your name here', nameTextController),
           ),
           myHeightSizedBox,
           Row(
@@ -54,10 +57,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           myHeightSizedBox,
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
-            child: const RegisterTextFormField(label: 'example@isik.edu.tr'),
-          ),
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
+              child: textFormField('example@isik.edu.tr', mailTextController)),
           myHeightSizedBox,
           Row(
             children: [
@@ -71,10 +73,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           myHeightSizedBox,
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
-            child: const RegisterTextFormField(label: '***************'),
-          ),
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
+              child: textFormField('***************', passwordTextController)),
           myHeightSizedBox,
           Row(
             children: [
@@ -88,14 +89,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           myHeightSizedBox,
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
-            child: const RegisterTextFormField(label: '***************'),
-          ),
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
+              child:
+                  textFormField('***************', repasswordTextController)),
           SizedBox(
             height: context.screenHeight * 0.030,
           ),
-          const RegisterSignupButton(text: 'Sign up'),
+          registerSignUp(),
           SizedBox(
             height: context.screenHeight * 0.030,
           ),
@@ -108,6 +109,50 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Material textFormField(String label, TextEditingController controller) {
+    return Material(
+      elevation: 6,
+      borderRadius: BorderRadius.circular(10),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          labelStyle: const TextStyle(
+              color: Color.fromRGBO(54, 67, 86, 1),
+              fontSize: 14,
+              fontWeight: FontWeight.w300),
+          labelText: label,
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        ),
+      ),
+    );
+  }
+
+  InkWell registerSignUp() {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: MyColors.applicationMustUsedBlue,
+        ),
+        alignment: Alignment.center,
+        height: 48,
+        width: 225,
+        child: const Text(
+          'Sign up',
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
