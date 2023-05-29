@@ -8,7 +8,7 @@ class RegisterPic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: context.screenHeight * .14),
+      margin: EdgeInsets.only(top: context.screenHeight * .10),
       child: SvgPicture.asset(
         'assets/images/register_page_pic.svg',
         width: context.screenWidth * .6,

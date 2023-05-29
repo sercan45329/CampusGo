@@ -54,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.159),
-                child:
-                    textFormField('example@isik.edu.tr', mailTextController)),
+                child: textFormField(
+                    'example@isik.edu.tr', mailTextController, false)),
             myHeightSizedBox,
             Row(
               children: [
@@ -71,8 +71,8 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.159),
-                child:
-                    textFormField('***************', passwordTextController)),
+                child: textFormField(
+                    '***************', passwordTextController, true)),
             SizedBox(
               height: context.screenHeight * 0.030,
             ),
@@ -86,7 +86,8 @@ class _LoginPageState extends State<LoginPage> {
                 const Text("Don't have account? "),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "/RegistrationPage");
+                    Navigator.pushReplacementNamed(
+                        context, "/RegistrationPage");
                   },
                   child: Text('Sign Up',
                       style:
@@ -108,11 +109,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Material textFormField(String label, TextEditingController controller) {
+  Material textFormField(
+      String label, TextEditingController controller, bool obscureText) {
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
+        obscureText: obscureText,
         validator: (value) {
           if (value!.isEmpty) {
             return "Fill the blank";
@@ -147,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         if (formkey.currentState!.validate()) {
           var result = await AuthService()
               .login(mailTextController.text, passwordTextController.text);
-          if (result == 'Login Successful') {
+          if (result == 'Login Successful' && context.mounted) {
             Navigator.pushNamed(context, "/HomePage");
           }
           ScaffoldMessenger.of(context)
