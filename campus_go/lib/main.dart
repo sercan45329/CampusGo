@@ -1,3 +1,4 @@
+import 'package:campus_go/presentation/pages/forum_page.dart';
 import 'package:campus_go/presentation/pages/home_page.dart';
 import 'package:campus_go/presentation/pages/login_page.dart';
 import 'package:campus_go/presentation/pages/registration_page.dart';
