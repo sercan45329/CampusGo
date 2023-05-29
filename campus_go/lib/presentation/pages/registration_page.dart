@@ -180,8 +180,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               mailTextController.text,
               passwordTextController.text,
               repasswordTextController.text);
-          if (result == 'Login Successful' && context.mounted) {
-            Navigator.pushNamed(context, "/HomePage");
+          if (result == 'Registration Successful') {
+            Navigator.pushNamed(context, "/LoginPage");
           }
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(result!)));

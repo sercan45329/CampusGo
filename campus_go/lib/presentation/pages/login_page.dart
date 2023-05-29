@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             const LoginPic(),
             SizedBox(
-              height: context.screenHeight * 0.050,
+              height: context.screenHeight * 0.05,
             ),
             Row(
               children: [
