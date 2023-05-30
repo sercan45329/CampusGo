@@ -56,4 +56,22 @@ class AuthService {
     }
     return "Registration Successful";
   }
+
+  Future<String?> forgotPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "user-not-found":
+          return "User not found";
+        case "invalid-email":
+          return "Invalid Email";
+        case "operation-not-allowed":
+          return "Something went wrong";
+        case "user-disable":
+          return "User has been disabled";
+      }
+    }
+    return "Mail sent to reset your password";
+  }
 }

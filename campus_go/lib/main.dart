@@ -1,3 +1,4 @@
+import 'package:campus_go/presentation/pages/forgot_password_page.dart';
 import 'package:campus_go/presentation/pages/forum_page.dart';
 import 'package:campus_go/presentation/pages/home_page.dart';
 import 'package:campus_go/presentation/pages/login_page.dart';
@@ -23,7 +24,8 @@ class MainApp extends StatelessWidget {
       routes: {
         "/LoginPage": (context) => const LoginPage(),
         "/RegistrationPage": (context) => const RegistrationPage(),
-        "/HomePage": (context) => const HomePage()
+        "/HomePage": (context) => const HomePage(),
+        "/ForgotPasswordPage": (context) => const ForgotPasswordPage()
       },
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),

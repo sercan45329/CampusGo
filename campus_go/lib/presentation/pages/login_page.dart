@@ -98,11 +98,16 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: context.screenHeight * 0.030,
             ),
-            Text('Forgot Password?',
-                style: TextStyle(
-                    color: MyColors.applicationMustUsedBlue,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15))
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, "/ForgotPasswordPage");
+              },
+              child: Text('Forgot Password?',
+                  style: TextStyle(
+                      color: MyColors.applicationMustUsedBlue,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15)),
+            )
           ],
         ),
       ),
