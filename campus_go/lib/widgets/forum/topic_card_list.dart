@@ -1,4 +1,3 @@
-
 import 'package:campus_go/service/topic_management.dart';
 import 'package:flutter/material.dart';
 
@@ -37,21 +36,6 @@ class _TopicCardList extends State<TopicCardList> {
       children: [
         Container(
           padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              Text(
-                data![index]["title"].toString(),
-                style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                data![index]["postNumber"].toString() + " POST",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )
-            ],
-          ),
           width: 180,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -68,6 +52,21 @@ class _TopicCardList extends State<TopicCardList> {
                       ]),
             shape: BoxShape.rectangle,
             borderRadius: const BorderRadius.all(Radius.circular(40)),
+          ),
+          child: Column(
+            children: [
+              Text(
+                data![index]["title"].toString(),
+                style: const TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "${data[index]["postNumber"]} POST",
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              )
+            ],
           ),
 
           // Replace with the desired colors for each item
