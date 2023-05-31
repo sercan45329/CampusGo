@@ -14,6 +14,14 @@ class NavBar extends StatelessWidget {
         tabBackgroundColor: Colors.grey.shade800,
         gap: 10,
         padding: EdgeInsets.all(context.screenHeight * 0.02),
+        onTabChange: (value) {
+          if (value == 0) {
+            Navigator.pushReplacementNamed(context, '/HomePage');
+          }
+          if (value == 2) {
+            Navigator.pushReplacementNamed(context, '/SettingsPage');
+          }
+        },
         tabs: const [
           GButton(icon: Icons.home, text: 'Home'),
           GButton(icon: Icons.person, text: 'Profile'),

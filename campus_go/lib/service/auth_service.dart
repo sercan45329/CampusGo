@@ -38,6 +38,8 @@ class AuthService {
           "email": mail,
           "password": password,
           "userID": credential.user!.uid,
+          "profileURL":
+              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
         });
       } on FirebaseAuthException catch (e) {
         print(e.code);

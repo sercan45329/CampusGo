@@ -94,21 +94,26 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  margin: EdgeInsets.only(top: 16.0),
-                  width: context.screenWidth * 0.85,
-                  height: context.screenHeight * 0.20,
-                  decoration: BoxDecoration(
-                    color: MyColors.applicationMustUsedBlue,
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'FORUM',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/ForumPage");
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 16.0),
+                    width: context.screenWidth * 0.85,
+                    height: context.screenHeight * 0.20,
+                    decoration: BoxDecoration(
+                      color: MyColors.applicationMustUsedBlue,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'FORUM',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

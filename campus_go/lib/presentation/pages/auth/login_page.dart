@@ -4,7 +4,7 @@ import 'package:campus_go/widgets/login_page_widgets/login_pic.dart';
 import 'package:campus_go/widgets/login_page_widgets/login_text.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/constants/my_colors.dart';
+import '../../../data/constants/my_colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
           var result = await AuthService()
               .login(mailTextController.text, passwordTextController.text);
           if (result == 'Login Successful' && context.mounted) {
-            Navigator.pushNamed(context, "/HomePage");
+            Navigator.pushReplacementNamed(context, "/HomePage");
           }
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(result!)));
