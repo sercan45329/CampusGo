@@ -4,11 +4,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../../models/model.dart';
 
-class ForumPageDetails extends StatelessWidget {
+class ForumPageDetailsTest extends StatelessWidget {
   //const ForumPageDetails({super.key});
   final Question question;
   // ignore: use_key_in_widget_constructors
-  const ForumPageDetails(String question, {this.question});
+  const ForumPageDetailsTest(String question, {this.question});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
