@@ -1,6 +1,7 @@
 import 'package:campus_go/presentation/pages/auth/forgot_password_page.dart';
 import 'package:campus_go/presentation/pages/forum/add_post_page.dart';
 import 'package:campus_go/presentation/pages/forum/forum_page.dart';
+import 'package:campus_go/presentation/pages/forum/forum_page_details.dart';
 import 'package:campus_go/presentation/pages/home_page.dart';
 import 'package:campus_go/presentation/pages/auth/login_page.dart';
 import 'package:campus_go/presentation/pages/auth/registration_page.dart';
@@ -9,6 +10,7 @@ import 'package:campus_go/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'presentation/pages/forum/forum_page_details_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +34,12 @@ class MainApp extends StatelessWidget {
         "/ForgotPasswordPage": (context) => const ForgotPasswordPage(),
         "/SeeAllPostPage": (context) => const SeeAllPostPage(),
         "/AddPostPage": (context) => const AddPostPage(),
-        "/SettingsPage": (context) => const SettingsPage()
+        "/SettingsPage": (context) => const SettingsPage(),
+        "/ForumPageDetails": (context) => const ForumPageDetails()
       },
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: const ForumPageDetails(),
     );
   }
 }
+//ForumPageDetails
