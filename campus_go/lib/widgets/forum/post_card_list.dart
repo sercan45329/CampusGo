@@ -62,7 +62,7 @@ class _PostCardList extends State<PostCardList> {
     var profileURL = user!['profileURL'];
     var post = data![index];
     var name = user['name'];
-    var likenum = data![index]['likeNum'];
+    var likenum = data[index]['likeNum'];
     var comnum = data[index]['commentNum'];
     var title = data[index]['title'];
     var description = data[index]['description'];

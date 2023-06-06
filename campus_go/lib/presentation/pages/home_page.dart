@@ -69,20 +69,25 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: context.screenWidth * 0.40,
-                  height: context.screenHeight * 0.20,
-                  decoration: BoxDecoration(
-                    color: MyColors.applicationMustUsedBlue,
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'CAMPUS LIFE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/EventPage");
+                  },
+                  child: Container(
+                    width: context.screenWidth * 0.40,
+                    height: context.screenHeight * 0.20,
+                    decoration: BoxDecoration(
+                      color: MyColors.applicationMustUsedBlue,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'CAMPUS LIFE',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

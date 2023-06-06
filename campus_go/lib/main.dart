@@ -1,4 +1,7 @@
 import 'package:campus_go/presentation/pages/auth/forgot_password_page.dart';
+import 'package:campus_go/presentation/pages/campuslife/add_event_page.dart';
+import 'package:campus_go/presentation/pages/campuslife/campus_life_event_page.dart';
+import 'package:campus_go/presentation/pages/campuslife/campus_life_view_all_page.dart';
 import 'package:campus_go/presentation/pages/career/career_page.dart';
 import 'package:campus_go/presentation/pages/filter_page.dart';
 import 'package:campus_go/presentation/pages/forum/add_post_page.dart';
@@ -35,7 +38,10 @@ class MainApp extends StatelessWidget {
       "/SeeAllPostPage": (context) => const SeeAllPostPage(),
       "/AddPostPage": (context) => const AddPostPage(),
       "/SettingsPage": (context) => const SettingsPage(),
-      "/CareerPage": (context) => const CareerPage()
-    }, debugShowCheckedModeBanner: false, home: const LoginPage());
+      "/CareerPage": (context) => const CareerPage(),
+      "/ViewAllPageCampusLife": (context) => const ViewAllPageCampusLife(),
+      "/AddEventPage": (context) => const AddEventPage(),
+      "/EventPage": (context) => const EventPage(),
+    }, debugShowCheckedModeBanner: false, home: const HomePage());
   }
 }
