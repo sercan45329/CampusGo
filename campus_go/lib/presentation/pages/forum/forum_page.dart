@@ -1,4 +1,3 @@
-
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:campus_go/service/user_management.dart';
@@ -116,6 +115,11 @@ class ForumPage extends StatelessWidget {
             tabBackgroundColor: Colors.grey.shade800,
             gap: 10,
             padding: EdgeInsets.all(context.screenHeight * 0.02),
+            onTabChange: (value) {
+              if (value == 1) {
+                Navigator.pushNamed(context, "/AddPostPage");
+              }
+            },
             tabs: const [
               GButton(icon: Icons.home, text: 'Home'),
               GButton(icon: Icons.add, text: 'Add'),

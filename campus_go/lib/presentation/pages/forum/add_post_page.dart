@@ -1,4 +1,5 @@
 import 'package:campus_go/data/constants/phone_screen.dart';
+import 'package:campus_go/service/post_management.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/constants/my_colors.dart';
@@ -11,9 +12,10 @@ class AddPostPage extends StatefulWidget {
 }
 
 class _AddPostPageState extends State<AddPostPage> {
-  final nameTextController = TextEditingController();
-  final mailTextController = TextEditingController();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
   final formkey = GlobalKey<FormState>();
+  final postManager = PostManagement();
   String category = 'Gaming';
   var categories = [
     'Gaming',
@@ -25,8 +27,8 @@ class _AddPostPageState extends State<AddPostPage> {
   @override
   void initState() {
     super.initState();
-    nameTextController.text = 'Title';
-    mailTextController.text = 'Description';
+    titleController.text = 'Title';
+    descriptionController.text = 'Description';
   }
 
   @override
@@ -60,7 +62,7 @@ class _AddPostPageState extends State<AddPostPage> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.159),
-                child: textFormField('Title', nameTextController, false),
+                child: textFormField('Title', titleController, false),
               ),
               myHeightSizedBox,
               Row(
@@ -77,8 +79,8 @@ class _AddPostPageState extends State<AddPostPage> {
               Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
-                  child:
-                      textFormField('Description', mailTextController, false)),
+                  child: textFormField(
+                      'Description', descriptionController, false)),
               myHeightSizedBox,
               Row(
                 children: [
@@ -174,7 +176,17 @@ class _AddPostPageState extends State<AddPostPage> {
 
   InkWell addButton() {
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+        if (formkey.currentState!.validate()) {
+          var result = await postManager.addPost(
+              titleController.text, category, descriptionController.text);
+          if (result == 'Success') {
+            Navigator.pushReplacementNamed(context, '/ForumPage');
+          }
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(result!)));
+        }
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

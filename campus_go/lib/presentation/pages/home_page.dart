@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: 8.0),
                 Text(
-                  "Hi, UsanerName",
+                  "Hi, name here",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,

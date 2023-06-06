@@ -1,4 +1,5 @@
 import 'package:campus_go/presentation/pages/auth/forgot_password_page.dart';
+import 'package:campus_go/presentation/pages/filter_page.dart';
 import 'package:campus_go/presentation/pages/forum/add_post_page.dart';
 import 'package:campus_go/presentation/pages/forum/forum_page.dart';
 import 'package:campus_go/presentation/pages/home_page.dart';
@@ -32,7 +33,8 @@ class MainApp extends StatelessWidget {
         "/ForgotPasswordPage": (context) => const ForgotPasswordPage(),
         "/SeeAllPostPage": (context) => const SeeAllPostPage(),
         "/AddPostPage": (context) => const AddPostPage(),
-        "/SettingsPage": (context) => const SettingsPage()
+        "/SettingsPage": (context) => const SettingsPage(),
+        "/FilterPage": (context) => const FilterPage()
       },
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),

@@ -2,6 +2,7 @@ import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/constants/my_colors.dart';
+import '../../service/filter.dart';
 import '../../service/post_management.dart';
 import '../../service/user_management.dart';
 
@@ -36,28 +37,54 @@ class _AllPostListState extends State<AllPostList> {
                 .toString()
                 .toLowerCase()
                 .startsWith(widget.searchValue.toLowerCase())) {
-              return FutureBuilder(
-                future: usermanager.getUserByID(addedby),
-                builder: (context, snapshott) {
-                  var user = snapshott.data;
+              if (Filter.selectedCategoryData
+                  .contains(list[index]['category'])) {
+                return FutureBuilder(
+                  future: usermanager.getUserByID(addedby),
+                  builder: (context, snapshott) {
+                    var user = snapshott.data;
 
-                  if (snapshott.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  return Column(
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: context.screenWidth * 0.070,
-                              right: context.screenWidth * 0.070),
-                          child: postCard(list, index, user)),
-                      const SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  );
-                },
-              );
+                    if (snapshott.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Column(
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: context.screenWidth * 0.070,
+                                right: context.screenWidth * 0.070),
+                            child: postCard(list, index, user)),
+                        const SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    );
+                  },
+                );
+              } else if (Filter.selectedCategoryData.isEmpty) {
+                return FutureBuilder(
+                  future: usermanager.getUserByID(addedby),
+                  builder: (context, snapshott) {
+                    var user = snapshott.data;
+
+                    if (snapshott.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Column(
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: context.screenWidth * 0.070,
+                                right: context.screenWidth * 0.070),
+                            child: postCard(list, index, user)),
+                        const SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    );
+                  },
+                );
+              }
             }
             return Container();
           },

@@ -36,10 +36,31 @@ class PostManagement {
       'title': 'Deneme baslık',
       'addedBy': _auth.currentUser!.uid,
       'category': 'Gaming',
-      'likeNum': '0',
-      'commentNum': '0',
+      'likeNum': 0,
+      'commentNum': 0,
       'description': 'deneme açıklama',
       'postID': docID
     });
+  }
+
+  Future<String> addPost(
+      String title, String category, String description) async {
+    List<Map<String, dynamic>> list = [];
+    var docRef = _postCollection.doc();
+    var docID = docRef.id;
+    try {
+      await docRef.set({
+        'title': title,
+        'addedBy': _auth.currentUser!.uid,
+        'category': category,
+        'likeNum': 0,
+        'commentNum': 0,
+        'description': description,
+        'postID': docID
+      });
+      return 'Success';
+    } catch (e) {
+      return e.toString();
+    }
   }
 }
