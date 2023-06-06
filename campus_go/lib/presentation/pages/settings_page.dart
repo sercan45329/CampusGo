@@ -1,3 +1,4 @@
+import 'package:campus_go/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -11,8 +12,10 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: Center(
-      child: Text('Settings Page'),
-    ));
+      body: Center(
+        child: Text('Settings Page'),
+      ),
+      bottomNavigationBar: NavBar(),
+    );
   }
 }

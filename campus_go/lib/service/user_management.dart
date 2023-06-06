@@ -12,6 +12,16 @@ class UserManagement {
     return url;
   }
 
+  Future<Map<String, dynamic>> getCurrentUser() async {
+    var snapshot = await _userCollection
+        .where('userID', isEqualTo: _auth.currentUser!.uid)
+        .limit(1)
+        .get();
+    var data = snapshot.docs.first.data();
+
+    return data;
+  }
+
   Future<Map<String, dynamic>> getUserByID(String userID) async {
     var snapshot =
         await _userCollection.where('userID', isEqualTo: userID).limit(1).get();

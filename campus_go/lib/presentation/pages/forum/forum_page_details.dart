@@ -1,16 +1,27 @@
 import 'dart:math';
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
+import 'package:campus_go/service/user_management.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:comment_box/comment/comment.dart';
 
 import '../../../data/constants/my_colors.dart';
+import '../../../service/comment_management.dart';
+import '../../../service/post_management.dart';
 import '../../../widgets/forum/post_card_list.dart';
 
 class ForumPageDetails extends StatefulWidget {
-  const ForumPageDetails({super.key});
+  final userData;
+  final postData;
+  final currentUser;
+  const ForumPageDetails(
+      {super.key,
+      required this.userData,
+      required this.postData,
+      required this.currentUser});
 
   @override
   State<ForumPageDetails> createState() => _ForumPageDetailsState();
@@ -19,79 +30,85 @@ class ForumPageDetails extends StatefulWidget {
 class _ForumPageDetailsState extends State<ForumPageDetails> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
-  List filedata = [
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'https://www.adeleyeayodeji.com/img/IMG_20200522_121756_834_2.jpg',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Tunde Martins',
-      'pic': 'assets/img/userpic.jpg',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-  ];
+  final usermanager = UserManagement();
+  final commentmanager = CommentManagement();
+  final postmanager = PostManagement();
+  Color? likeColor;
 
-  Widget commentChild(data) {
+  Widget commentChild() {
     return Column(
       children: [
         Expanded(
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.only(top: 40),
-              child: postCardDetails(),
+              child: FutureBuilder(
+                future: postmanager.getPostByID(widget.postData['postID']),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  var data = snapshot.data;
+                  return postCardDetails(data!['commentNum'], data!['likeNum']);
+                },
+              ),
             )),
-        Expanded(
-          child: ListView(
-            children: [
-              for (var i = 0; i < data.length; i++)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 0.0),
-                  child: ListTile(
-                    leading: GestureDetector(
-                      onTap: () async {
-                        // Display the image in large form.
-                        print("Comment Clicked");
-                      },
-                      child: Container(
-                        height: 50.0,
-                        width: 50.0,
-                        decoration: new BoxDecoration(
-                            color: Color.fromARGB(255, 30, 137, 224),
-                            borderRadius:
-                                new BorderRadius.all(Radius.circular(50))),
-                        child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: CommentBox.commentImageParser(
-                                imageURLorPath: data[i]['pic'])),
+        FutureBuilder(
+            future: commentmanager.getAllComments(widget.postData['postID']),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+
+              var commentList = snapshot.data;
+
+              return commentList == null
+                  ? const SizedBox(
+                      height: 200,
+                    )
+                  : Expanded(
+                      child: ListView(
+                        children: [
+                          for (var i = 0; i < commentList.length; i++)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 0.0),
+                              child: ListTile(
+                                leading: GestureDetector(
+                                  onTap: () async {},
+                                  child: Container(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 30, 137, 224),
+                                        borderRadius: new BorderRadius.all(
+                                            Radius.circular(50))),
+                                    child: CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage:
+                                            CommentBox.commentImageParser(
+                                                imageURLorPath: commentList[i]
+                                                    ['profileURL'])),
+                                  ),
+                                ),
+                                title: Text(
+                                  commentList[i]['author'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(commentList[i]['description']),
+                                trailing: Text(
+                                    commentList[i]['timestamp']
+                                        .toDate()
+                                        .toString(),
+                                    style: const TextStyle(fontSize: 10)),
+                              ),
+                            )
+                        ],
                       ),
-                    ),
-                    title: Text(
-                      data[i]['name'],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(data[i]['message']),
-                    trailing:
-                        Text(data[i]['date'], style: TextStyle(fontSize: 10)),
-                  ),
-                )
-            ],
-          ),
-        ),
+                    );
+            }),
       ],
     );
   }
@@ -100,53 +117,43 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: CommentBox(
-          /*userImage: CommentBox.commentImageParser(
-              imageURLorPath: "assets/img/userpic.jpg"),*/
-          child: commentChild(filedata),
-          labelText: 'Write a comment...',
-          errorText: 'Comment cannot be blank',
-          withBorder: false,
-          sendButtonMethod: () {
-            if (formKey.currentState!.validate()) {
-              print(commentController.text);
-              setState(() {
-                var value = {
-                  'name': 'New User',
-                  'pic':
-                      'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-                  'message': commentController.text,
-                  'date': '2021-01-01 12:00:00'
-                };
-                filedata.insert(0, value);
-              });
-              commentController.clear();
-              FocusScope.of(context).unfocus();
-            } else {
-              print("Not validated");
-            }
-          },
-          formKey: formKey,
-          commentController: commentController,
-          backgroundColor: Colors.black54,
-          textColor: Colors.white,
-          sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
-        ),
-      ),
-    );
+        body: Container(
+            child: CommentBox(
+      userImage: CommentBox.commentImageParser(
+          imageURLorPath: NetworkImage(widget.currentUser!['profileURL'])),
+      labelText: 'Write a comment...',
+      errorText: 'Comment cannot be blank',
+      withBorder: false,
+      sendButtonMethod: () async {
+        if (formKey.currentState!.validate()) {
+          await commentmanager.addComment(
+              widget.postData['postID'],
+              commentController.text,
+              widget.currentUser['name'],
+              widget.currentUser['profileURL']);
+
+          await postmanager.increaseCommentNum(widget.postData['postID']);
+
+          commentController.clear();
+          FocusScope.of(context).unfocus();
+        }
+        setState(() {});
+      },
+      formKey: formKey,
+      commentController: commentController,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      sendWidget: const Icon(Icons.send_sharp, size: 30, color: Colors.white),
+      child: commentChild(),
+    )));
   }
 
-  Container postCardDetails() {
-    var profileURL =
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fimage&psig=AOvVaw0VDQD7lLuIYOq7dvJKMPL0&ust=1685787621574000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMCVoLSupP8CFQAAAAAdAAAAABAE";
-    var name = "test";
-    var likenum = 3;
-    var comnum = 3;
-    var title = "TEST";
-    var description =
-        "here are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour";
-    var category = 'gaming';
+  Container postCardDetails(var comnum, var likenum) {
+    var profileURL = widget.userData['profileURL'];
+    var name = widget.userData['name'];
+    var title = widget.postData['title'];
+    var description = widget.postData['description'];
+    var category = widget.postData['category'];
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -221,9 +228,48 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
               children: [
                 Row(
                   children: [
-                    const Icon(
-                      Icons.thumb_up_alt_outlined,
-                      color: Colors.white,
+                    FutureBuilder(
+                      future:
+                          postmanager.checkIfLiked(widget.postData['postID']),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+                        return IconButton(
+                            onPressed: () async {
+                              var data = await postmanager
+                                  .getPostByID(widget.postData['postID']);
+                              var currentUserID =
+                                  usermanager.getCurrentUserID();
+                              var docRef = await postmanager
+                                  .getPostDocRefByID(widget.postData['postID']);
+
+                              var likeList = List.from(data!['likes']);
+                              if (!likeList.contains(currentUserID)) {
+                                likeColor = Colors.green.shade600;
+                                await docRef.update({
+                                  'likes':
+                                      FieldValue.arrayUnion([currentUserID]),
+                                  'likeNum': FieldValue.increment(1)
+                                });
+                              } else if (likeList.contains(currentUserID)) {
+                                likeColor = Colors.white;
+                                await docRef.update(
+                                  {
+                                    'likes':
+                                        FieldValue.arrayRemove([currentUserID]),
+                                    'likeNum': FieldValue.increment(-1)
+                                  },
+                                );
+                              }
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: snapshot.data,
+                            ));
+                      },
                     ),
                     const SizedBox(
                       width: 5,

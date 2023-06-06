@@ -1,5 +1,6 @@
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
+import 'package:campus_go/service/user_management.dart';
 import 'package:campus_go/widgets/nav_Bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final usermanager = UserManagement();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,24 +25,39 @@ class _HomePageState extends State<HomePage> {
           children: [
             SizedBox(height: 30.0),
             Row(
-              children: const [
+              children: [
                 Padding(padding: EdgeInsets.only(left: 30)),
-                Icon(
-                  Icons.face,
-                  color: Colors.yellow,
-                  size: 36.0,
-                ),
+                FutureBuilder(
+                    future: usermanager
+                        .getProfileURLByID(usermanager.getCurrentUserID()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      return CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(snapshot.data!),
+                      );
+                    }),
+                const SizedBox(width: 8.0),
+                FutureBuilder(
+                    future: usermanager.getCurrentUser(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      var name = snapshot.data!['name'];
+                      return Text(
+                        "Hi, $name",
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }),
                 SizedBox(width: 8.0),
-                Text(
-                  "Hi, name here",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 8.0),
-                Icon(
+                const Icon(
                   Icons.waving_hand,
                   color: Colors.yellow,
                   size: 30.0,
@@ -48,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const HomePic(),
-            SizedBox(height: 70.0),
+            const SizedBox(height: 70.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -59,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                     color: MyColors.applicationMustUsedBlue,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'CAMPUS LIFE',
                       style: TextStyle(
@@ -70,21 +87,26 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16.0),
-                Container(
-                  width: context.screenWidth * 0.40,
-                  height: context.screenHeight * 0.20,
-                  decoration: BoxDecoration(
-                    color: MyColors.applicationMustUsedBlue,
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'CAREER',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                const SizedBox(width: 16.0),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/CareerPage");
+                  },
+                  child: Container(
+                    width: context.screenWidth * 0.40,
+                    height: context.screenHeight * 0.20,
+                    decoration: BoxDecoration(
+                      color: MyColors.applicationMustUsedBlue,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'CAREER',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -106,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                       color: MyColors.applicationMustUsedBlue,
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'FORUM',
                         style: TextStyle(
