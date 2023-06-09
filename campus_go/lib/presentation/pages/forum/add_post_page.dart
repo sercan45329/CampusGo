@@ -1,5 +1,6 @@
 import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:campus_go/service/post_management.dart';
+import 'package:campus_go/service/topic_management.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/constants/my_colors.dart';
@@ -44,12 +45,30 @@ class _AddPostPageState extends State<AddPostPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                  padding: EdgeInsets.only(top: context.screenHeight * 0.050),
-                  child: const Text(
-                    'Add Post',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                  )),
+              Row(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: context.screenWidth * 0.050,
+                          top: context.screenHeight * 0.050),
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.arrow_back))),
+                  Expanded(
+                    child: Padding(
+                        padding: EdgeInsets.only(
+                            left: context.screenWidth * 0.250,
+                            top: context.screenHeight * 0.050),
+                        child: const Text(
+                          'Add Post',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
+                        )),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   SizedBox(
@@ -181,7 +200,8 @@ class _AddPostPageState extends State<AddPostPage> {
           var result = await postManager.addPost(
               titleController.text, category, descriptionController.text);
           if (result == 'Success') {
-            Navigator.pushReplacementNamed(context, '/ForumPage');
+            await TopicManagement().increasePostNumByCategory(category);
+            Navigator.pop(context);
           }
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(result!)));

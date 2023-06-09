@@ -77,6 +77,16 @@ class PostManagement {
     return docRef;
   }
 
+  Future<String> deletePost(String postID) async {
+    var docRef = _postCollection.doc(postID);
+    try {
+      await docRef.delete();
+      return 'Success';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<String> addPost(
       String title, String category, String description) async {
     List<Map<String, dynamic>> list = [];

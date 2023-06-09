@@ -16,4 +16,18 @@ class TopicManagement {
     }
     return list;
   }
+
+  Future<String> increasePostNumByCategory(String category) async {
+    var result =
+        await _topicCollection.where('title', isEqualTo: category).get();
+    var docID = result.docs.first.id;
+    try {
+      await _topicCollection
+          .doc(docID)
+          .update({'postNumber': FieldValue.increment(1)});
+      return 'Success';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
 }

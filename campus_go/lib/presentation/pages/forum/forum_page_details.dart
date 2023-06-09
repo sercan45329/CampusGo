@@ -38,21 +38,39 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
   Widget commentChild() {
     return Column(
       children: [
-        Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: FutureBuilder(
-                future: postmanager.getPostByID(widget.postData['postID']),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  var data = snapshot.data;
-                  return postCardDetails(data!['commentNum'], data!['likeNum']);
-                },
-              ),
-            )),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+                padding: EdgeInsets.only(
+                  left: context.screenWidth * 0.050,
+                  top: context.screenHeight * 0.050,
+                  right: context.screenWidth * 0.025,
+                ),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.arrow_back))),
+            Expanded(
+                flex: 8,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: FutureBuilder(
+                    future: postmanager.getPostByID(widget.postData['postID']),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      var data = snapshot.data;
+                      return postCardDetails(
+                          data!['commentNum'], data!['likeNum']);
+                    },
+                  ),
+                )),
+            Expanded(flex: 1, child: SizedBox())
+          ],
+        ),
         FutureBuilder(
             future: commentmanager.getAllComments(widget.postData['postID']),
             builder: (context, snapshot) {
@@ -171,7 +189,7 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           color: Colors.blue),
       height: context.screenHeight * 0.45,
-      width: context.screenWidth * 0.80,
+      width: context.screenWidth * 0.70,
       child: Column(
         children: [
           Row(
@@ -292,6 +310,32 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                     Text(comnum.toString())
                   ],
                 ),
+                Padding(
+                  padding: EdgeInsets.only(left: context.screenWidth * 0.300),
+                  child: GestureDetector(
+                      onTap: () async {
+                        var result;
+                        if (widget.postData['addedBy'] ==
+                            usermanager.getCurrentUserID()) {
+                          result = await postmanager
+                              .deletePost(widget.postData['postID']);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(result)));
+                          Navigator.pop(context);
+                        } else if (widget.postData['addedBy'] !=
+                            usermanager.getCurrentUserID()) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('You dont have the permission!')));
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(result)));
+                        }
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      )),
+                )
               ],
             ),
           )

@@ -47,7 +47,7 @@ class _FilterPageState extends State<FilterPage> {
                     children: [
                       Text(
                         Filter.categoryData[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15,
                             color: Colors.black,
                             fontWeight: FontWeight.w400),

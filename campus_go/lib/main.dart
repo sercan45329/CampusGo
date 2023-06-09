@@ -3,10 +3,8 @@ import 'package:campus_go/presentation/pages/campuslife/add_event_page.dart';
 import 'package:campus_go/presentation/pages/campuslife/campus_life_event_page.dart';
 import 'package:campus_go/presentation/pages/campuslife/campus_life_view_all_page.dart';
 import 'package:campus_go/presentation/pages/career/career_page.dart';
-import 'package:campus_go/presentation/pages/filter_page.dart';
 import 'package:campus_go/presentation/pages/forum/add_post_page.dart';
 import 'package:campus_go/presentation/pages/forum/forum_page.dart';
-import 'package:campus_go/presentation/pages/forum/forum_page_details.dart';
 import 'package:campus_go/presentation/pages/home_page.dart';
 import 'package:campus_go/presentation/pages/auth/login_page.dart';
 import 'package:campus_go/presentation/pages/auth/registration_page.dart';
@@ -42,6 +40,6 @@ class MainApp extends StatelessWidget {
       "/ViewAllPageCampusLife": (context) => const ViewAllPageCampusLife(),
       "/AddEventPage": (context) => const AddEventPage(),
       "/EventPage": (context) => const EventPage(),
-    }, debugShowCheckedModeBanner: false, home: const HomePage());
+    }, debugShowCheckedModeBanner: false, home: const LoginPage());
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../../data/constants/my_colors.dart';
+import 'event_details_page.dart';
 
 class ViewAllPageCampusLife extends StatefulWidget {
   const ViewAllPageCampusLife({super.key});
@@ -29,9 +30,33 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, "/AddEventPage");
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: MyColors.applicationMustUsedBlue,
+                borderRadius: const BorderRadius.all(Radius.circular(25.0))),
+            child: const Padding(
+                padding: EdgeInsets.all(10.0), child: Icon(Icons.add)),
+          ),
+        ),
+      ),
       body: Column(children: [
         Row(
           children: [
+            Padding(
+                padding: EdgeInsets.only(
+                    left: context.screenWidth * 0.050,
+                    top: context.screenHeight * 0.050),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.arrow_back))),
             Expanded(
               child: Padding(
                   padding: EdgeInsets.only(
@@ -104,171 +129,158 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
             child: Padding(
                 padding: const EdgeInsets.all(15), child: jobPostingCardList()))
       ]),
-      bottomNavigationBar: GNav(
-          backgroundColor: Colors.black,
-          color: Colors.white,
-          activeColor: Colors.white,
-          tabBackgroundColor: Colors.grey.shade800,
-          gap: 10,
-          padding: EdgeInsets.all(context.screenHeight * 0.02),
-          onTabChange: (value) {
-            if (value == 1) {
-              if (!_isDisposed) {
-                Navigator.pushReplacementNamed(context, "/AddEventPage");
-              }
-            }
-          },
-          tabs: const [
-            GButton(icon: Icons.home, text: 'Home'),
-            GButton(icon: Icons.add, text: 'Add'),
-            GButton(
-              icon: Icons.settings,
-              text: 'Settings',
-            )
-          ]),
     );
   }
 
-  Container jobPostingCard(Map<String, dynamic>? data) {
+  GestureDetector jobPostingCard(Map<String, dynamic>? data) {
     var maxParticipant = data!['maxParticipant'];
     var activeParticipant = data['activeParticipant'];
-    return Container(
-      height: context.screenHeight * 0.10,
-      width: context.screenWidth * 0.85,
-      decoration: BoxDecoration(
-          color: MyColors.applicationMustUsedBlue,
-          borderRadius: BorderRadius.circular(50)),
-      child: Row(
-        children: [
-          FutureBuilder(
-              future:
-                  usermanager.getProfileURLByID(usermanager.getCurrentUserID()),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(snapshot.data!),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailsPage(data: data),
+          ),
+        );
+      },
+      child: Container(
+        height: context.screenHeight * 0.10,
+        width: context.screenWidth * 0.85,
+        decoration: BoxDecoration(
+            color: MyColors.applicationMustUsedBlue,
+            borderRadius: BorderRadius.circular(50)),
+        child: Row(
+          children: [
+            FutureBuilder(
+                future: usermanager.getProfileURLByID(data['addedBy']),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(snapshot.data!),
+                    ),
+                  );
+                }),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        data!['title'],
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: context.screenWidth * 0.35,
+                      ),
+                      Text(
+                        data['date'],
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
                   ),
-                );
-              }),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 3,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      data!['title'],
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: context.screenWidth * 0.35,
-                    ),
-                    Text(
-                      data['date'],
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5, left: 10),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(20)),
-                            height: context.screenHeight * 0.1,
-                            width: context.screenWidth * 0.15,
-                            child: Center(
-                                child: Text(
-                              data['location'],
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10),
-                            )),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
+                Expanded(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5, left: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(20)),
+                              height: context.screenHeight * 0.1,
+                              width: context.screenWidth * 0.15,
+                              child: Center(
+                                  child: Text(
+                                data['location'],
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              )),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5, left: 10),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(20)),
-                            height: context.screenHeight * 0.1,
-                            width: context.screenWidth * 0.15,
-                            child: Center(
-                                child: Text(
-                              data['price'].toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10),
-                            )),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5, left: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(20)),
+                              height: context.screenHeight * 0.1,
+                              width: context.screenWidth * 0.15,
+                              child: Center(
+                                  child: Text(
+                                data['price'].toString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              )),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5, left: 10),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(20)),
-                            height: context.screenHeight * 0.1,
-                            width: context.screenWidth * 0.15,
-                            child: Center(
-                                child: Text(
-                              "$activeParticipant/$maxParticipant",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10),
-                            )),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          )
-        ],
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5, left: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(20)),
+                              height: context.screenHeight * 0.1,
+                              width: context.screenWidth * 0.15,
+                              child: Center(
+                                  child: Text(
+                                "$activeParticipant/$maxParticipant",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              )),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

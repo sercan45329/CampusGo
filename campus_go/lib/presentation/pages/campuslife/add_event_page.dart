@@ -1,5 +1,6 @@
 import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:campus_go/service/event_management.dart';
+import 'package:campus_go/service/topic_management.dart';
 import 'package:campus_go/service/user_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,7 @@ class _AddEventPageState extends State<AddEventPage> {
   final locationController = TextEditingController();
   final maxParticipantController = TextEditingController();
   final dateController = TextEditingController();
+  final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final myHeightSizedBox = SizedBox(
@@ -34,133 +36,154 @@ class _AddEventPageState extends State<AddEventPage> {
         resizeToAvoidBottomInset: false,
         body: Form(
           key: formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40, left: 15, right: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, "/ViewAllPageCampusLife");
-                        },
-                        icon: const Icon(Icons.arrow_back)),
-                    const Expanded(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Add Event',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 40, left: 15, right: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.arrow_back)),
+                      const Expanded(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Add Event',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24),
+                          ),
                         ),
                       ),
+                      const SizedBox(
+                        width: 30,
+                      )
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
                     ),
-                    const SizedBox(
-                      width: 30,
-                    )
+                    Align(
+                        alignment: Alignment.centerLeft, child: text('Title')),
                   ],
                 ),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(alignment: Alignment.centerLeft, child: text('Title')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.screenWidth * 0.159),
-                child: textFormField('Title', titleController, false),
-              ),
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: text('Description')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
+                myHeightSizedBox,
+                Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
-                  child: textFormField(
-                      'Description', descriptionController, false)),
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft, child: text('Location')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: context.screenWidth * 0.159),
-                  child: textFormField('Location', locationController, false)),
-              myHeightSizedBox,
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(alignment: Alignment.centerLeft, child: text('Price')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: context.screenWidth * 0.159),
-                  child: numTextFormField('Price', priceController, false)),
-              myHeightSizedBox,
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: text('Max Participant')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: context.screenWidth * 0.159),
-                  child: numTextFormField(
-                      'Max Participant', maxParticipantController, false)),
-              myHeightSizedBox,
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(alignment: Alignment.centerLeft, child: text('Date')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: context.screenWidth * 0.159),
-                  child: datePicker()),
-              myHeightSizedBox,
-              addButton()
-            ],
+                  child: textFormField('Title', titleController, false),
+                ),
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: text('Description')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child: textFormField(
+                        'Description', descriptionController, false)),
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: text('Location')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child:
+                        textFormField('Location', locationController, false)),
+                myHeightSizedBox,
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft, child: text('Price')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child: numTextFormField('Price', priceController, false)),
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft, child: text('Phone')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child:
+                        phoneTextFormField('Location', phoneController, false)),
+                myHeightSizedBox,
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: text('Max Participant')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child: numTextFormField(
+                        'Max Participant', maxParticipantController, false)),
+                myHeightSizedBox,
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(alignment: Alignment.centerLeft, child: text('Date')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child: datePicker()),
+                myHeightSizedBox,
+                addButton()
+              ],
+            ),
           ),
         ));
   }
@@ -174,6 +197,8 @@ class _AddEventPageState extends State<AddEventPage> {
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
+        minLines: 1,
+        maxLines: 1,
         obscureText: obscureText,
         validator: (value) {
           if (value!.isEmpty) {
@@ -246,6 +271,49 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 
+  Material phoneTextFormField(
+    String label,
+    TextEditingController controller,
+    bool obscureText,
+  ) {
+    return Material(
+      elevation: 6,
+      borderRadius: BorderRadius.circular(10),
+      child: TextFormField(
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly
+        ],
+        keyboardType: TextInputType.phone,
+        // rest of your TextFormField properties
+        obscureText: obscureText,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Fill the blank";
+          }
+        },
+        onTap: () {
+          if (controller.text == label) {
+            controller.clear();
+          }
+        },
+        controller: controller,
+        decoration: InputDecoration(
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          labelStyle: const TextStyle(
+              color: Color.fromRGBO(54, 67, 86, 1),
+              fontSize: 14,
+              fontWeight: FontWeight.w300),
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        ),
+      ),
+    );
+  }
+
   InkWell addButton() {
     return InkWell(
       onTap: () async {
@@ -259,11 +327,12 @@ class _AddEventPageState extends State<AddEventPage> {
               locationController.text,
               priceController.text,
               int.parse(maxParticipantController.text),
-              dateController.text);
+              dateController.text,
+              phoneController.text);
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(result)));
           if (result == 'Success') {
-            Navigator.pushReplacementNamed(context, "/ViewAllPageCampusLife");
+            Navigator.pop(context);
           }
         }
       },
