@@ -49,7 +49,7 @@ class _ForumPageState extends State<ForumPage> {
                       top: context.screenHeight * 0.050),
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, "/HomePage");
                       },
                       child: const Icon(Icons.arrow_back))),
               Expanded(
@@ -63,24 +63,29 @@ class _ForumPageState extends State<ForumPage> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     )),
               ),
-              FutureBuilder(
-                  future: usermanager
-                      .getProfileURLByID(usermanager.getCurrentUserID()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return Align(
-                      child: Padding(
-                          padding: EdgeInsets.only(
-                              right: context.screenWidth * 0.095,
-                              top: context.screenHeight * 0.050),
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(snapshot.data!),
-                          )),
-                    );
-                  }),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/ProfilePage");
+                },
+                child: FutureBuilder(
+                    future: usermanager
+                        .getProfileURLByID(usermanager.getCurrentUserID()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      return Align(
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                right: context.screenWidth * 0.095,
+                                top: context.screenHeight * 0.050),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(snapshot.data!),
+                            )),
+                      );
+                    }),
+              ),
             ],
           ),
           Align(
@@ -122,7 +127,8 @@ class _ForumPageState extends State<ForumPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/SeeAllPostPage");
+                          Navigator.pushReplacementNamed(
+                              context, "/SeeAllPostPage");
                         },
                         child: const Text(
                           'See all',

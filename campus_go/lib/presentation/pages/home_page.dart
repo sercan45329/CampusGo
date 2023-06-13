@@ -27,18 +27,23 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               Padding(padding: EdgeInsets.only(left: 30)),
-              FutureBuilder(
-                  future: usermanager
-                      .getProfileURLByID(usermanager.getCurrentUserID()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(snapshot.data!),
-                    );
-                  }),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/ProfilePage");
+                },
+                child: FutureBuilder(
+                    future: usermanager
+                        .getProfileURLByID(usermanager.getCurrentUserID()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      return CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(snapshot.data!),
+                      );
+                    }),
+              ),
               const SizedBox(width: 8.0),
               FutureBuilder(
                   future: usermanager.getCurrentUser(),
@@ -71,7 +76,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/EventPage");
+                  Navigator.pushReplacementNamed(context, "/EventPage");
                 },
                 child: Container(
                   width: context.screenWidth * 0.40,
@@ -95,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(width: 16.0),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/CareerPage");
+                  Navigator.pushReplacementNamed(context, "/CareerPage");
                 },
                 child: Container(
                   width: context.screenWidth * 0.40,
@@ -123,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/ForumPage");
+                  Navigator.pushReplacementNamed(context, "/ForumPage");
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 16.0),

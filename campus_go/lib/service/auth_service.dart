@@ -24,6 +24,51 @@ class AuthService {
     return "Something went wrong";
   }
 
+  Future<String> reauthenticate(AuthCredential credential) async {
+    try {
+      await _auth.currentUser!.reauthenticateWithCredential(credential);
+      return "Success";
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "invalid-email":
+          return "Invalid Email";
+        case "invalid-credential":
+          return "Invalid Credential";
+        case "user-mismatch":
+          return "User mismatched";
+        case "user-disable":
+          return "User has been disabled";
+        case "user-not-found":
+          return "User not found";
+        case "wrong-password":
+          return "Wrong password";
+      }
+    }
+    return "Something went wrong";
+  }
+
+  Future<String> updatePassword(String newPassword) async {
+    try {
+      await _auth.currentUser!.updatePassword(newPassword);
+      return "Success";
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "weak-password":
+          return "Weak Password";
+      }
+    }
+    return "Something went wrong";
+  }
+
+  Future<String> signOut() async {
+    try {
+      await _auth.signOut();
+      return "Success";
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<String?> register(
       String name, String mail, String password, String repassword) async {
     if (repassword != password) {

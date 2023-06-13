@@ -54,7 +54,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                     top: context.screenHeight * 0.050),
                 child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context, "/EventPage");
                     },
                     child: const Icon(Icons.arrow_back))),
             Expanded(
@@ -67,24 +67,29 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   )),
             ),
-            FutureBuilder(
-                future: usermanager
-                    .getProfileURLByID(usermanager.getCurrentUserID()),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  return Align(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            right: context.screenWidth * 0.095,
-                            top: context.screenHeight * 0.050),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundImage: NetworkImage(snapshot.data!),
-                        )),
-                  );
-                }),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, "/ProfilePage");
+              },
+              child: FutureBuilder(
+                  future: usermanager
+                      .getProfileURLByID(usermanager.getCurrentUserID()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Align(
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              right: context.screenWidth * 0.095,
+                              top: context.screenHeight * 0.050),
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(snapshot.data!),
+                          )),
+                    );
+                  }),
+            ),
           ],
         ),
         Padding(
@@ -137,7 +142,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
     var activeParticipant = data['activeParticipant'];
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => EventDetailsPage(data: data),

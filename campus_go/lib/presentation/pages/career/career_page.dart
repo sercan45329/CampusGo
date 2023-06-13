@@ -27,24 +27,29 @@ class _CareerPageState extends State<CareerPage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   )),
             ),
-            FutureBuilder(
-                future: usermanager
-                    .getProfileURLByID(usermanager.getCurrentUserID()),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  return Align(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            right: context.screenWidth * 0.095,
-                            top: context.screenHeight * 0.050),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundImage: NetworkImage(snapshot.data!),
-                        )),
-                  );
-                }),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, "/ProfilePage");
+              },
+              child: FutureBuilder(
+                  future: usermanager
+                      .getProfileURLByID(usermanager.getCurrentUserID()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Align(
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              right: context.screenWidth * 0.095,
+                              top: context.screenHeight * 0.050),
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(snapshot.data!),
+                          )),
+                    );
+                  }),
+            ),
           ],
         ),
         Align(

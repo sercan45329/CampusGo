@@ -27,10 +27,14 @@ class _EventPageState extends State<EventPage> {
           },
           child: Container(
             decoration: BoxDecoration(
-                color: MyColors.applicationMustUsedBlue,
+                color: Colors.black,
                 borderRadius: const BorderRadius.all(Radius.circular(25.0))),
             child: const Padding(
-                padding: EdgeInsets.all(10.0), child: Icon(Icons.add)),
+                padding: EdgeInsets.all(10.0),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                )),
           ),
         ),
       ),
@@ -45,7 +49,7 @@ class _EventPageState extends State<EventPage> {
                       top: context.screenHeight * 0.050),
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, "/HomePage");
                       },
                       child: const Icon(Icons.arrow_back))),
               Expanded(
@@ -60,24 +64,29 @@ class _EventPageState extends State<EventPage> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     )),
               ),
-              FutureBuilder(
-                  future: usermanager
-                      .getProfileURLByID(usermanager.getCurrentUserID()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return Align(
-                      child: Padding(
-                          padding: EdgeInsets.only(
-                              right: context.screenWidth * 0.095,
-                              top: context.screenHeight * 0.050),
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(snapshot.data!),
-                          )),
-                    );
-                  }),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/ProfilePage");
+                },
+                child: FutureBuilder(
+                    future: usermanager
+                        .getProfileURLByID(usermanager.getCurrentUserID()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      return Align(
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                right: context.screenWidth * 0.095,
+                                top: context.screenHeight * 0.050),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(snapshot.data!),
+                            )),
+                      );
+                    }),
+              ),
             ],
           ),
           Padding(
@@ -102,7 +111,8 @@ class _EventPageState extends State<EventPage> {
                 padding: const EdgeInsets.only(right: 30.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "/ViewAllPageCampusLife");
+                    Navigator.pushReplacementNamed(
+                        context, "/ViewAllPageCampusLife");
                   },
                   child: Text('See all',
                       style: TextStyle(

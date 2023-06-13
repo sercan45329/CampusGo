@@ -49,7 +49,7 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                 ),
                 child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context, "/ForumPage");
                     },
                     child: const Icon(Icons.arrow_back))),
             Expanded(
@@ -89,40 +89,52 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                         children: [
                           for (var i = 0; i < commentList.length; i++)
                             Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 0.0),
-                              child: ListTile(
-                                leading: GestureDetector(
-                                  onTap: () async {},
-                                  child: Container(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    decoration: BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 30, 137, 224),
-                                        borderRadius: new BorderRadius.all(
-                                            Radius.circular(50))),
-                                    child: CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage:
-                                            CommentBox.commentImageParser(
-                                                imageURLorPath: commentList[i]
-                                                    ['profileURL'])),
-                                  ),
-                                ),
-                                title: Text(
-                                  commentList[i]['author'],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Text(commentList[i]['description']),
-                                trailing: Text(
-                                    commentList[i]['timestamp']
-                                        .toDate()
-                                        .toString(),
-                                    style: const TextStyle(fontSize: 10)),
-                              ),
-                            )
+                                padding: const EdgeInsets.fromLTRB(
+                                    2.0, 8.0, 2.0, 0.0),
+                                child: FutureBuilder(
+                                    future: usermanager
+                                        .getUserByID(commentList[i]['addedBy']),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      }
+                                      var user = snapshot.data;
+                                      return ListTile(
+                                        leading: GestureDetector(
+                                          onTap: () async {},
+                                          child: Container(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 30, 137, 224),
+                                                borderRadius:
+                                                    new BorderRadius.all(
+                                                        Radius.circular(50))),
+                                            child: CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: CommentBox
+                                                    .commentImageParser(
+                                                        imageURLorPath: user![
+                                                            'profileURL'])),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          user['name'],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle:
+                                            Text(commentList[i]['description']),
+                                        trailing: Text(
+                                            commentList[i]['timestamp']
+                                                .toDate()
+                                                .toString(),
+                                            style:
+                                                const TextStyle(fontSize: 10)),
+                                      );
+                                    }))
                         ],
                       ),
                     );

@@ -84,7 +84,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                         top: context.screenHeight * 0.050),
                     child: GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(context, "/EventPage");
                         },
                         child: const Icon(Icons.arrow_back))),
                 Padding(
@@ -99,24 +99,30 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                 const SizedBox(
                   width: 110,
                 ),
-                FutureBuilder(
-                    future: usermanager
-                        .getProfileURLByID(usermanager.getCurrentUserID()),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      return Align(
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                                right: context.screenWidth * 0.095,
-                                top: context.screenHeight * 0.050),
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(snapshot.data!),
-                            )),
-                      );
-                    })
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/ProfilePage");
+                  },
+                  child: FutureBuilder(
+                      future: usermanager
+                          .getProfileURLByID(usermanager.getCurrentUserID()),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        return Align(
+                          child: Padding(
+                              padding: EdgeInsets.only(
+                                  right: context.screenWidth * 0.095,
+                                  top: context.screenHeight * 0.050),
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(snapshot.data!),
+                              )),
+                        );
+                      }),
+                )
               ],
             ),
             Row(
@@ -127,22 +133,41 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                           right: context.screenWidth * 0.050,
                           top: context.screenHeight * 0.050,
                           left: context.screenWidth * 0.095),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundImage:
-                            NetworkImage(widget.data['profileURL']),
-                      )),
+                      child: FutureBuilder(
+                          future:
+                              usermanager.getUserByID(widget.data['addedBy']),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            return CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(snapshot.data!['profileURL']),
+                            );
+                          })),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: context.screenHeight * 0.050),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Name&Surname:${widget.data['name']}',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      FutureBuilder(
+                          future:
+                              usermanager.getUserByID(widget.data['addedBy']),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            return Text(
+                              'Name:${snapshot.data!['name']}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            );
+                          }),
                       Text('Phone:${widget.data['phone']}',
                           style: TextStyle(
                               color: Colors.white,
@@ -218,12 +243,22 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
                   SizedBox(
-                    width: 90,
+                    width: 40,
                   ),
                   Icon(Icons.mail),
-                  Text('${widget.data['mail']}',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold))
+                  FutureBuilder(
+                      future: usermanager.getUserByID(widget.data['addedBy']),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        return Text(
+                          '${snapshot.data!['email']}',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        );
+                      })
                 ],
               ),
             ),

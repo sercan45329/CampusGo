@@ -1,4 +1,5 @@
 import 'package:campus_go/data/constants/my_colors.dart';
+import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../service/filter.dart';
@@ -19,6 +20,19 @@ class _FilterPageState extends State<FilterPage> {
       padding: const EdgeInsets.all(20.0),
       child: ListView(
         children: [
+          Padding(
+              padding: EdgeInsets.only(
+                  left: context.screenWidth * 0.010,
+                  bottom: context.screenWidth * 0.040),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacementNamed(
+                          context, "/SeeAllPostPage");
+                    },
+                    child: const Icon(Icons.arrow_back)),
+              )),
           Text(
             'Category',
             style: TextStyle(

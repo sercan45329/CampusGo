@@ -1,5 +1,6 @@
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
+import 'package:campus_go/presentation/pages/filter_page.dart';
 import 'package:campus_go/widgets/forum/all_post_list.dart';
 import 'package:campus_go/widgets/nav_Bar.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _SeeAllPostPageState extends State<SeeAllPostPage> {
                       top: context.screenHeight * 0.050),
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, "/ForumPage");
                       },
                       child: const Icon(Icons.arrow_back))),
               Expanded(
@@ -59,24 +60,29 @@ class _SeeAllPostPageState extends State<SeeAllPostPage> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     )),
               ),
-              FutureBuilder(
-                  future: usermanager
-                      .getProfileURLByID(usermanager.getCurrentUserID()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return Align(
-                      child: Padding(
-                          padding: EdgeInsets.only(
-                              right: context.screenWidth * 0.095,
-                              top: context.screenHeight * 0.050),
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(snapshot.data!),
-                          )),
-                    );
-                  })
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/ProfilePage");
+                },
+                child: FutureBuilder(
+                    future: usermanager
+                        .getProfileURLByID(usermanager.getCurrentUserID()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      return Align(
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                right: context.screenWidth * 0.095,
+                                top: context.screenHeight * 0.050),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(snapshot.data!),
+                            )),
+                      );
+                    }),
+              )
             ],
           ),
           Padding(
