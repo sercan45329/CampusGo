@@ -76,6 +76,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
+                  if (usermanager.getCurrentEmail() ==
+                      'careereditor@isik.edu.tr') {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("You don't have permission to do that")));
+                    return;
+                  }
                   Navigator.pushReplacementNamed(context, "/EventPage");
                 },
                 child: Container(
@@ -128,6 +134,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
+                  if (usermanager.getCurrentEmail() ==
+                      'careereditor@isik.edu.tr') {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("You don't have permission to do that")));
+                    return;
+                  }
                   Navigator.pushReplacementNamed(context, "/ForumPage");
                 },
                 child: Container(

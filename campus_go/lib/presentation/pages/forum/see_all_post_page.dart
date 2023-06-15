@@ -1,10 +1,9 @@
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
-import 'package:campus_go/presentation/pages/filter_page.dart';
+
 import 'package:campus_go/widgets/forum/all_post_list.dart';
-import 'package:campus_go/widgets/nav_Bar.dart';
+
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../../service/user_management.dart';
 
@@ -21,11 +20,12 @@ class _SeeAllPostPageState extends State<SeeAllPostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, "/AddPostPage");
+            Navigator.pushReplacementNamed(context, "/AddPostPage");
           },
           child: Container(
             decoration: const BoxDecoration(
@@ -62,7 +62,7 @@ class _SeeAllPostPageState extends State<SeeAllPostPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/ProfilePage");
+                  Navigator.pushReplacementNamed(context, "/ProfilePage");
                 },
                 child: FutureBuilder(
                     future: usermanager
@@ -108,7 +108,8 @@ class _SeeAllPostPageState extends State<SeeAllPostPage> {
                       suffixIcon: IconButton(
                           icon: const Icon(Icons.filter_alt),
                           onPressed: () {
-                            Navigator.pushNamed(context, "/FilterPage");
+                            Navigator.pushReplacementNamed(
+                                context, "/FilterPage");
                           },
                           color: MyColors.applicationMustUsedBlue)),
                 )),

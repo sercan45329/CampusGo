@@ -27,70 +27,74 @@ class _AllPostListState extends State<AllPostList> {
           return const CircularProgressIndicator();
         }
         var list = snapshot.data;
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
+        return (list!.isEmpty)
+            ? const Center(child: Text('No posts yet'))
+            : ListView.builder(
+                itemBuilder: (context, index) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
 
-            var addedby = list[index]['addedBy'];
-            if (list[index]['title']
-                .toString()
-                .toLowerCase()
-                .startsWith(widget.searchValue.toLowerCase())) {
-              if (Filter.selectedCategoryData
-                  .contains(list[index]['category'])) {
-                return FutureBuilder(
-                  future: usermanager.getUserByID(addedby),
-                  builder: (context, snapshott) {
-                    var user = snapshott.data;
+                  var addedby = list[index]['addedBy'];
+                  if (list[index]['title']
+                      .toString()
+                      .toLowerCase()
+                      .startsWith(widget.searchValue.toLowerCase())) {
+                    if (Filter.selectedCategoryData
+                        .contains(list[index]['category'])) {
+                      return FutureBuilder(
+                        future: usermanager.getUserByID(addedby),
+                        builder: (context, snapshott) {
+                          var user = snapshott.data;
 
-                    if (snapshott.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                          if (snapshott.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          return Column(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: context.screenWidth * 0.070,
+                                      right: context.screenWidth * 0.070),
+                                  child: postCard(list, index, user)),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    } else if (Filter.selectedCategoryData.isEmpty) {
+                      return FutureBuilder(
+                        future: usermanager.getUserByID(addedby),
+                        builder: (context, snapshott) {
+                          var user = snapshott.data;
+
+                          if (snapshott.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          return Column(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: context.screenWidth * 0.070,
+                                      right: context.screenWidth * 0.070),
+                                  child: postCard(list, index, user)),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          );
+                        },
+                      );
                     }
-                    return Column(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: context.screenWidth * 0.070,
-                                right: context.screenWidth * 0.070),
-                            child: postCard(list, index, user)),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    );
-                  },
-                );
-              } else if (Filter.selectedCategoryData.isEmpty) {
-                return FutureBuilder(
-                  future: usermanager.getUserByID(addedby),
-                  builder: (context, snapshott) {
-                    var user = snapshott.data;
-
-                    if (snapshott.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return Column(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: context.screenWidth * 0.070,
-                                right: context.screenWidth * 0.070),
-                            child: postCard(list, index, user)),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    );
-                  },
-                );
-              }
-            }
-            return Container();
-          },
-          itemCount: list!.length,
-        );
+                  }
+                  return Container();
+                },
+                itemCount: list.length,
+              );
       },
     );
   }
@@ -103,6 +107,10 @@ class _AllPostListState extends State<AllPostList> {
     var comnum = data[index]['commentNum'];
     var title = data[index]['title'];
     var description = data[index]['description'];
+    if (description.length > 100) {
+      String shortenedDescription = '${description.substring(0, 100)}...';
+      description = shortenedDescription;
+    }
     var category = data[index]['category'];
     return GestureDetector(
       onTap: () async {

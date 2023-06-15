@@ -2,7 +2,9 @@ import 'package:campus_go/presentation/pages/auth/forgot_password_page.dart';
 import 'package:campus_go/presentation/pages/campuslife/add_event_page.dart';
 import 'package:campus_go/presentation/pages/campuslife/campus_life_event_page.dart';
 import 'package:campus_go/presentation/pages/campuslife/campus_life_view_all_page.dart';
+import 'package:campus_go/presentation/pages/career/add_job_post_page.dart';
 import 'package:campus_go/presentation/pages/career/career_page.dart';
+import 'package:campus_go/presentation/pages/career/career_view_all.dart';
 import 'package:campus_go/presentation/pages/filter_page.dart';
 import 'package:campus_go/presentation/pages/forum/add_post_page.dart';
 import 'package:campus_go/presentation/pages/forum/forum_page.dart';
@@ -11,7 +13,6 @@ import 'package:campus_go/presentation/pages/auth/login_page.dart';
 import 'package:campus_go/presentation/pages/auth/registration_page.dart';
 import 'package:campus_go/presentation/pages/forum/see_all_post_page.dart';
 import 'package:campus_go/presentation/pages/profile_page.dart';
-import 'package:campus_go/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -37,13 +38,14 @@ class MainApp extends StatelessWidget {
       "/ForgotPasswordPage": (context) => const ForgotPasswordPage(),
       "/SeeAllPostPage": (context) => const SeeAllPostPage(),
       "/AddPostPage": (context) => const AddPostPage(),
-      "/SettingsPage": (context) => const SettingsPage(),
       "/CareerPage": (context) => const CareerPage(),
       "/ViewAllPageCampusLife": (context) => const ViewAllPageCampusLife(),
       "/AddEventPage": (context) => const AddEventPage(),
       "/EventPage": (context) => const EventPage(),
       "/ProfilePage": (context) => const ProfilePage(),
-      "/FilterPage": (context) => const FilterPage()
+      "/FilterPage": (context) => const FilterPage(),
+      "/CareerViewAllPage": (context) => const CareerViewAll(),
+      "/AddJobPostPage": (context) => const AddJobPostPage()
     }, debugShowCheckedModeBanner: false, home: const LoginPage());
   }
 }

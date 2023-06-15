@@ -23,12 +23,12 @@ class _EventPageState extends State<EventPage> {
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, "/AddEventPage");
+            Navigator.pushReplacementNamed(context, "/AddEventPage");
           },
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.black,
-                borderRadius: const BorderRadius.all(Radius.circular(25.0))),
+                borderRadius: BorderRadius.all(Radius.circular(25.0))),
             child: const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Icon(
@@ -66,7 +66,7 @@ class _EventPageState extends State<EventPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/ProfilePage");
+                  Navigator.pushReplacementNamed(context, "/ProfilePage");
                 },
                 child: FutureBuilder(
                     future: usermanager
@@ -89,9 +89,9 @@ class _EventPageState extends State<EventPage> {
               ),
             ],
           ),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: const Text(
+          const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
                 'Featured Events',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               )),
@@ -101,9 +101,9 @@ class _EventPageState extends State<EventPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: const Text(
+              const Padding(
+                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  child: Text(
                     'All Events',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   )),
@@ -114,7 +114,7 @@ class _EventPageState extends State<EventPage> {
                     Navigator.pushReplacementNamed(
                         context, "/ViewAllPageCampusLife");
                   },
-                  child: Text('See all',
+                  child: const Text('See all',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
@@ -135,9 +135,13 @@ class _EventPageState extends State<EventPage> {
   GestureDetector jobPostingCard(Map<String, dynamic>? data) {
     var maxParticipant = data!['maxParticipant'];
     var activeParticipant = data['activeParticipant'];
+    var location = data['location'];
+    if (location.length > 7) {
+      location = location.substring(0, 7) + '...';
+    }
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => EventDetailsPage(data: data),
@@ -172,23 +176,21 @@ class _EventPageState extends State<EventPage> {
                 Expanded(
                   flex: 3,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Text(
-                        data['title'],
-                        style: TextStyle(
+                        data['title'] + '/',
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        width: context.screenWidth * 0.35,
-                      ),
                       Text(
                         data['date'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
@@ -211,8 +213,8 @@ class _EventPageState extends State<EventPage> {
                               width: context.screenWidth * 0.15,
                               child: Center(
                                   child: Text(
-                                data['location'],
-                                style: TextStyle(
+                                location,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 10),
@@ -237,7 +239,7 @@ class _EventPageState extends State<EventPage> {
                               child: Center(
                                   child: Text(
                                 data['price'].toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 10),
@@ -290,11 +292,14 @@ class _EventPageState extends State<EventPage> {
       future: eventmanager.getAllPosts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         var list = snapshot.data;
+        if (list!.isEmpty) {
+          return Container();
+        }
         return ListView.separated(
-          itemCount: list!.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
             var data = snapshot.data![index];
             return jobPostingCard(data);
@@ -316,10 +321,12 @@ class _EventPageState extends State<EventPage> {
     var activeParticipant = data['activeParticipant'];
     var date = data['date'];
     var location = data['location'];
-
+    if (location.length > 7) {
+      location = location.substring(0, 7) + '...';
+    }
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => EventDetailsPage(data: data),
@@ -352,10 +359,10 @@ class _EventPageState extends State<EventPage> {
                       );
                     }),
                 Padding(
-                    padding: EdgeInsets.only(right: 20.0),
+                    padding: const EdgeInsets.only(right: 20.0),
                     child: Text(
                       '$date',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 13,
                           fontWeight: FontWeight.bold),
@@ -366,21 +373,21 @@ class _EventPageState extends State<EventPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                    padding: EdgeInsets.only(left: 25),
+                    padding: const EdgeInsets.only(left: 25),
                     child: Text(
                       '$title',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.bold),
                     )),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -393,13 +400,13 @@ class _EventPageState extends State<EventPage> {
                     child: Center(
                         child: Text(
                       '$location',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 10),
                     )),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Container(
@@ -411,13 +418,13 @@ class _EventPageState extends State<EventPage> {
                     child: Center(
                         child: Text(
                       '$price',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 10),
                     )),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Container(
@@ -429,7 +436,7 @@ class _EventPageState extends State<EventPage> {
                     child: Center(
                         child: Text(
                       '$activeParticipant/$maxParticipant',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 10),
@@ -457,6 +464,9 @@ class _EventPageState extends State<EventPage> {
             }
             var list = snapshot.data;
             var data = list![index];
+            if (list.isEmpty) {
+              return Container();
+            }
             return Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: minimalEventCard(data));
@@ -464,7 +474,7 @@ class _EventPageState extends State<EventPage> {
         );
       },
       separatorBuilder: (context, index) {
-        return SizedBox(
+        return const SizedBox(
           width: 10,
         );
       },

@@ -1,17 +1,13 @@
-import 'dart:math';
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
+import 'package:campus_go/presentation/pages/forum/edit_post_page.dart';
+import 'package:campus_go/service/topic_management.dart';
 import 'package:campus_go/service/user_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:comment_box/comment/comment.dart';
-
-import '../../../data/constants/my_colors.dart';
 import '../../../service/comment_management.dart';
 import '../../../service/post_management.dart';
-import '../../../widgets/forum/post_card_list.dart';
 
 class ForumPageDetails extends StatefulWidget {
   final userData;
@@ -68,7 +64,7 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                     },
                   ),
                 )),
-            Expanded(flex: 1, child: SizedBox())
+            const Expanded(flex: 1, child: SizedBox())
           ],
         ),
         FutureBuilder(
@@ -106,12 +102,11 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                                           child: Container(
                                             height: 50.0,
                                             width: 50.0,
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 color: Color.fromARGB(
                                                     255, 30, 137, 224),
-                                                borderRadius:
-                                                    new BorderRadius.all(
-                                                        Radius.circular(50))),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50))),
                                             child: CircleAvatar(
                                                 radius: 50,
                                                 backgroundImage: CommentBox
@@ -142,7 +137,6 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
       ],
     );
   }
-  /*Yukarıdaki kod parçasında, CommentBox widget'ının içinde commentImageBuilder adlı bir özellik eklenmiştir. Bu özellik, CommentBox içindeki görselin oluşturulmasını sağlar. Yukarıdaki kodda, commentImageBuilder ile bir SizedBox döndürerek görseli kaldırmış olursunuz. Böylece "Write comment" yazısının solundaki görsel kaldırılmış olur. */
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +258,7 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                         return IconButton(
                             onPressed: () async {
@@ -322,32 +316,61 @@ class _ForumPageDetailsState extends State<ForumPageDetails> {
                     Text(comnum.toString())
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: context.screenWidth * 0.300),
-                  child: GestureDetector(
-                      onTap: () async {
-                        var result;
-                        if (widget.postData['addedBy'] ==
-                            usermanager.getCurrentUserID()) {
-                          result = await postmanager
-                              .deletePost(widget.postData['postID']);
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(result)));
-                          Navigator.pop(context);
-                        } else if (widget.postData['addedBy'] !=
-                            usermanager.getCurrentUserID()) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('You dont have the permission!')));
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(result)));
-                        }
-                      },
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      )),
-                )
+                (usermanager.getCurrentUserID() == widget.postData['addedBy'] ||
+                        usermanager.getCurrentEmail() == 'admin@isik.edu.tr')
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            left: context.screenWidth * 0.150,
+                            right: context.screenWidth * 0.05),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditPostPage(postData: widget.postData),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            )),
+                      )
+                    : Container(),
+                (usermanager.getCurrentUserID() == widget.postData['addedBy'] ||
+                        usermanager.getCurrentEmail() == 'admin@isik.edu.tr')
+                    ? GestureDetector(
+                        onTap: () async {
+                          var result;
+                          if (widget.postData['addedBy'] ==
+                              usermanager.getCurrentUserID()) {
+                            result = await postmanager
+                                .deletePost(widget.postData['postID']);
+                            if (result == 'Success') {
+                              await TopicManagement()
+                                  .descreasePostNumByCategory(
+                                      widget.postData['category']);
+                            }
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(result)));
+                            Navigator.pushReplacementNamed(
+                                context, "/ForumPage");
+                          } else if (widget.postData['addedBy'] !=
+                              usermanager.getCurrentUserID()) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text('You dont have the permission!')));
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(result)));
+                          }
+                        },
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ))
+                    : Container()
               ],
             ),
           )

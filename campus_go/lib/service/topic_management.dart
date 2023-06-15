@@ -10,6 +10,9 @@ class TopicManagement {
     var snapshot =
         await _topicCollection.orderBy("postNumber", descending: true).get();
     var docs = snapshot.docs;
+    if (snapshot.docs.isEmpty) {
+      return list;
+    }
     for (var i = 0; i < count; i++) {
       var data = docs[i].data();
       list.add(data);
@@ -25,6 +28,20 @@ class TopicManagement {
       await _topicCollection
           .doc(docID)
           .update({'postNumber': FieldValue.increment(1)});
+      return 'Success';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<String> descreasePostNumByCategory(String category) async {
+    var result =
+        await _topicCollection.where('title', isEqualTo: category).get();
+    var docID = result.docs.first.id;
+    try {
+      await _topicCollection
+          .doc(docID)
+          .update({'postNumber': FieldValue.increment(-1)});
       return 'Success';
     } on Exception catch (e) {
       return e.toString();

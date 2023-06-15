@@ -60,6 +60,23 @@ class AuthService {
     return "Something went wrong";
   }
 
+  Future<String> updateMail(String newMail) async {
+    try {
+      await _auth.currentUser!.updateEmail(newMail);
+      return "Success";
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "email-already-in-use":
+          return "Email already in use";
+        case "invalid-email":
+          return "Invalid mail";
+        case "requires-recent-login":
+          return "Requires recent login";
+      }
+    }
+    return "Something went wrong";
+  }
+
   Future<String> signOut() async {
     try {
       await _auth.signOut();

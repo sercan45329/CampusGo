@@ -18,15 +18,17 @@ class _TopicCardList extends State<TopicCardList> {
       future: topicmanager.getPopularTopics(3),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
-        return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 3, // Replace with the actual number of items in your list
-          itemBuilder: (context, index) {
-            return topicCard(index, snapshot.data);
-          },
-        );
+        return (snapshot.data!.isEmpty)
+            ? const Center(child: Text('No posts yet '))
+            : ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return topicCard(index, snapshot.data);
+                },
+              );
       },
     );
   }
@@ -68,8 +70,6 @@ class _TopicCardList extends State<TopicCardList> {
               )
             ],
           ),
-
-          // Replace with the desired colors for each item
         ),
         const SizedBox(
           width: 20,

@@ -11,6 +11,9 @@ class PostManagement {
     var snapshot =
         await _postCollection.orderBy("likeNum", descending: true).get();
     var docs = snapshot.docs;
+    if (snapshot.docs.isEmpty) {
+      return list;
+    }
     for (var i = 0; i < count; i++) {
       var data = docs[i].data();
       list.add(data);
@@ -34,6 +37,9 @@ class PostManagement {
     List<Map<String, dynamic>> list = [];
     var snapshot = await _postCollection.get();
     var docs = snapshot.docs;
+    if (snapshot.docs.isEmpty) {
+      return list;
+    }
     for (var i = 0; i < docs.length; i++) {
       var data = docs[i].data();
       list.add(data);
@@ -81,6 +87,18 @@ class PostManagement {
     var docRef = _postCollection.doc(postID);
     try {
       await docRef.delete();
+      return 'Success';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<String> updatePost(
+      String postID, String title, String category, String description) async {
+    var docRef = _postCollection.doc(postID);
+    try {
+      await docRef.update(
+          {'title': title, 'description': description, 'category': category});
       return 'Success';
     } on Exception catch (e) {
       return e.toString();

@@ -1,18 +1,19 @@
 import 'package:campus_go/data/constants/phone_screen.dart';
-import 'package:campus_go/service/post_management.dart';
 import 'package:campus_go/service/topic_management.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/constants/my_colors.dart';
+import '../../../service/post_management.dart';
 
-class AddPostPage extends StatefulWidget {
-  const AddPostPage({super.key});
+class EditPostPage extends StatefulWidget {
+  final postData;
+  const EditPostPage({super.key, required this.postData});
 
   @override
-  State<AddPostPage> createState() => _AddPostPageState();
+  State<EditPostPage> createState() => _EditPostPageState();
 }
 
-class _AddPostPageState extends State<AddPostPage> {
+class _EditPostPageState extends State<EditPostPage> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final formkey = GlobalKey<FormState>();
@@ -28,8 +29,9 @@ class _AddPostPageState extends State<AddPostPage> {
   @override
   void initState() {
     super.initState();
-    titleController.text = 'Title';
-    descriptionController.text = 'Description';
+    titleController.text = widget.postData['title'];
+    descriptionController.text = widget.postData['description'];
+    category = widget.postData['category'];
   }
 
   @override
@@ -37,6 +39,7 @@ class _AddPostPageState extends State<AddPostPage> {
     final myHeightSizedBox = SizedBox(
       height: context.screenHeight * 0.010,
     );
+
     return Scaffold(
         backgroundColor: MyColors.appBackground,
         resizeToAvoidBottomInset: false,
@@ -53,8 +56,7 @@ class _AddPostPageState extends State<AddPostPage> {
                           top: context.screenHeight * 0.050),
                       child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, "/ForumPage");
+                            Navigator.pop(context);
                           },
                           child: const Icon(Icons.arrow_back))),
                   Expanded(
@@ -63,7 +65,7 @@ class _AddPostPageState extends State<AddPostPage> {
                             left: context.screenWidth * 0.250,
                             top: context.screenHeight * 0.050),
                         child: const Text(
-                          'Add Post',
+                          'Edit Post',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24),
                         )),
@@ -82,7 +84,7 @@ class _AddPostPageState extends State<AddPostPage> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.159),
-                child: textFormField('Title', titleController, false, 1, 1, 35),
+                child: textFormField(titleController, false, 35, 1),
               ),
               myHeightSizedBox,
               Row(
@@ -99,8 +101,7 @@ class _AddPostPageState extends State<AddPostPage> {
               Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
-                  child: textFormField(
-                      'Description', descriptionController, false, 6, 1, 450)),
+                  child: textFormField(descriptionController, false, 450, 6)),
               myHeightSizedBox,
               Row(
                 children: [
@@ -153,32 +154,27 @@ class _AddPostPageState extends State<AddPostPage> {
               SizedBox(
                 height: context.screenHeight * 0.025,
               ),
-              addButton()
+              editButton()
             ],
           ),
         ));
   }
 
-  Material textFormField(String label, TextEditingController controller,
-      bool obscureText, int maxLines, int minLines, int maxLength) {
+  Material textFormField(TextEditingController controller, bool obscureText,
+      int maxLength, int maxLines) {
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
-        maxLength: maxLength,
         maxLines: maxLines,
-        minLines: minLines,
+        maxLength: maxLength,
         obscureText: obscureText,
         validator: (value) {
           if (value!.isEmpty) {
             return "Fill the blank";
           }
         },
-        onTap: () {
-          if (controller.text == label) {
-            controller.clear();
-          }
-        },
+        onTap: () {},
         controller: controller,
         decoration: InputDecoration(
           focusedBorder: const UnderlineInputBorder(
@@ -197,18 +193,25 @@ class _AddPostPageState extends State<AddPostPage> {
     );
   }
 
-  InkWell addButton() {
+  InkWell editButton() {
     return InkWell(
       onTap: () async {
         if (formkey.currentState!.validate()) {
-          var result = await postManager.addPost(
+          var result = await postManager.updatePost(widget.postData['postID'],
               titleController.text, category, descriptionController.text);
           if (result == 'Success') {
-            await TopicManagement().increasePostNumByCategory(category);
+            if (category != widget.postData['category']) {
+              await TopicManagement().increasePostNumByCategory(category);
+              await TopicManagement()
+                  .descreasePostNumByCategory(widget.postData['category']);
+            }
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(result)));
             Navigator.pushReplacementNamed(context, "/ForumPage");
+          } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(result)));
           }
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(result)));
         }
       },
       child: Container(
@@ -220,7 +223,7 @@ class _AddPostPageState extends State<AddPostPage> {
         height: 48,
         width: 225,
         child: const Text(
-          'Add Post',
+          'Edit Post',
           style: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),

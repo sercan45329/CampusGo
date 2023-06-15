@@ -10,6 +10,9 @@ class EventManagement {
     List<Map<String, dynamic>> list = [];
     var snapshot = await _eventCollection.get();
     var docs = snapshot.docs;
+    if (snapshot.docs.isEmpty) {
+      return list;
+    }
     for (var i = 0; i < docs.length; i++) {
       var data = docs[i].data();
       list.add(data);
@@ -26,7 +29,7 @@ class EventManagement {
 
   Future<DocumentReference<Map<String, dynamic>>> getEventDocRefByID(
       String eventID) async {
-    var docRef = await _eventCollection.doc(eventID);
+    var docRef = _eventCollection.doc(eventID);
 
     return docRef;
   }
@@ -78,6 +81,32 @@ class EventManagement {
     }
   }
 
+  Future<String> updateEvent(
+      String eventID,
+      String title,
+      String description,
+      String location,
+      String price,
+      String phone,
+      String maxParticipant,
+      String date) async {
+    var docRef = _eventCollection.doc(eventID);
+    try {
+      await docRef.update({
+        'title': title,
+        'description': description,
+        'location': location,
+        'price': price,
+        'phone': phone,
+        'maxParticipant': int.parse(maxParticipant),
+        'date': date
+      });
+      return 'Success';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getMostParticipatedEvents(
       int count) async {
     List<Map<String, dynamic>> list = [];
@@ -85,6 +114,9 @@ class EventManagement {
         .orderBy("activeParticipant", descending: true)
         .get();
     var docs = snapshot.docs;
+    if (snapshot.docs.isEmpty) {
+      return list;
+    }
     for (var i = 0; i < count; i++) {
       var data = docs[i].data();
       list.add(data);

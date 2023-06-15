@@ -23,8 +23,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final formkey = GlobalKey<FormState>();
   final formkey1 = GlobalKey<FormState>();
   final formkey2 = GlobalKey<FormState>();
+  final formkey3 = GlobalKey<FormState>();
   final storageRef = FirebaseStorage.instance.ref();
   final mailController = TextEditingController();
+  final newmailController = TextEditingController();
+  final nameController = TextEditingController();
   final passwordController = TextEditingController();
   final newPasswordController = TextEditingController();
   ImagePicker picker = ImagePicker();
@@ -219,7 +222,11 @@ class _ProfilePageState extends State<ProfilePage> {
   InkWell editProfileButton() {
     return InkWell(
       onTap: () async {
-        if (formkey.currentState!.validate()) {}
+        showDialog(
+            context: context,
+            builder: (context) {
+              return popUpDialogForEdit();
+            });
       },
       child: Container(
         decoration: BoxDecoration(
@@ -302,6 +309,70 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Form popUpDialogForEdit() {
+    return Form(
+      key: formkey1,
+      child: AlertDialog(
+        title: const Text('Enter your credentials'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Fill the blank';
+                }
+              },
+              controller: mailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            TextFormField(
+              obscureText: true,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Fill the blank';
+                }
+              },
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Submit'),
+            onPressed: () async {
+              if (formkey1.currentState!.validate()) {
+                AuthCredential credential = EmailAuthProvider.credential(
+                  email: mailController.text,
+                  password: passwordController.text,
+                );
+                var result = await AuthService().reauthenticate(credential);
+                if (result == "Success") {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return editDialog();
+                      });
+                } else {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(result)));
+                  Navigator.of(context).pop();
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Form changePasswordDialog() {
     return Form(
       key: formkey2,
@@ -344,6 +415,65 @@ class _ProfilePageState extends State<ProfilePage> {
                       builder: (context) {
                         return AlertDialog(title: Text(result));
                       });
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Form editDialog() {
+    return Form(
+      key: formkey3,
+      child: AlertDialog(
+        title: const Text('Enter your new name and mail'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Fill the blank';
+                }
+              },
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'New name'),
+            ),
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Fill the blank';
+                }
+              },
+              controller: newmailController,
+              decoration: const InputDecoration(labelText: 'New email'),
+            ),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed("/ProfilePage");
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Submit'),
+            onPressed: () async {
+              if (formkey3.currentState!.validate()) {
+                var result =
+                    await AuthService().updateMail(newmailController.text);
+                if (result == 'Success') {
+                  await usermanager.updateNameAndMailCurrentUser(
+                      newmailController.text, nameController.text);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(result)));
+                  Navigator.of(context).pushReplacementNamed("/ProfilePage");
+                } else {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(result)));
                 }
               }
             },

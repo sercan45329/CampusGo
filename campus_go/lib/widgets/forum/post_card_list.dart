@@ -21,38 +21,43 @@ class _PostCardList extends State<PostCardList> {
     return FutureBuilder(
       future: postmanager.getMostLikedPosts(2),
       builder: (context, snapshot) {
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-            var list = snapshot.data;
-            var addedby = list![index]['addedBy'];
-            return FutureBuilder(
-              future: usermanager.getUserByID(addedby),
-              builder: (context, snapshott) {
-                var user = snapshott.data;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        var list = snapshot.data;
 
-                if (snapshott.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                return Column(
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(
-                            left: context.screenWidth * 0.070,
-                            right: context.screenWidth * 0.070),
-                        child: postCard(list, index, user)),
-                    const SizedBox(
-                      height: 10,
-                    )
-                  ],
-                );
-              },
-            );
-          },
-          itemCount: 2,
-        );
+        return (list!.isEmpty)
+            ? const Center(child: Text('No posts yet'))
+            : ListView.builder(
+                itemBuilder: (context, index) {
+                  var addedby = list[index]['addedBy'];
+
+                  return FutureBuilder(
+                    future: usermanager.getUserByID(addedby),
+                    builder: (context, snapshott) {
+                      var user = snapshott.data;
+
+                      if (snapshott.connectionState ==
+                          ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      return Column(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: context.screenWidth * 0.070,
+                                  right: context.screenWidth * 0.070),
+                              child: postCard(list, index, user)),
+                          const SizedBox(
+                            height: 10,
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+                itemCount: 2,
+              );
       },
     );
   }
@@ -66,6 +71,10 @@ class _PostCardList extends State<PostCardList> {
     var comnum = data[index]['commentNum'];
     var title = data[index]['title'];
     var description = data[index]['description'];
+    if (description.length > 100) {
+      String shortenedDescription = '${description.substring(0, 100)}...';
+      description = shortenedDescription;
+    }
     var category = data[index]['category'];
     return GestureDetector(
       onTap: () async {

@@ -22,6 +22,20 @@ class UserManagement {
     return data;
   }
 
+  Future<String> updateNameAndMailCurrentUser(String mail, String name) async {
+    var snapshot = await _userCollection
+        .where('userID', isEqualTo: _auth.currentUser!.uid)
+        .limit(1)
+        .get();
+    var docID = snapshot.docs.first.id;
+    try {
+      await _userCollection.doc(docID).update({"name": name, "email": mail});
+      return 'Success';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<String> updateProfileURLByID(String id, String url) async {
     try {
       var snapshot = await _userCollection.where("userID", isEqualTo: id).get();

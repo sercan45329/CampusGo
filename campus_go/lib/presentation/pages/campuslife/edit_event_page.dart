@@ -1,21 +1,21 @@
 import 'package:campus_go/data/constants/phone_screen.dart';
-import 'package:campus_go/service/event_management.dart';
-import 'package:campus_go/service/topic_management.dart';
-import 'package:campus_go/service/user_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/constants/my_colors.dart';
+import '../../../service/event_management.dart';
+import '../../../service/user_management.dart';
 
-class AddEventPage extends StatefulWidget {
-  const AddEventPage({super.key});
+class EditEventPage extends StatefulWidget {
+  final eventData;
+  const EditEventPage({super.key, required this.eventData});
 
   @override
-  State<AddEventPage> createState() => _AddEventPageState();
+  State<EditEventPage> createState() => _EditEventPageState();
 }
 
-class _AddEventPageState extends State<AddEventPage> {
+class _EditEventPageState extends State<EditEventPage> {
   final formkey = GlobalKey<FormState>();
   final eventmanager = EventManagement();
   final usermanager = UserManagement();
@@ -26,6 +26,19 @@ class _AddEventPageState extends State<AddEventPage> {
   final maxParticipantController = TextEditingController();
   final dateController = TextEditingController();
   final phoneController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    titleController.text = widget.eventData['title'];
+    descriptionController.text = widget.eventData['description'];
+    priceController.text = widget.eventData['price'];
+    locationController.text = widget.eventData['location'];
+    maxParticipantController.text =
+        widget.eventData['maxParticipant'].toString();
+    dateController.text = widget.eventData['date'];
+    phoneController.text = widget.eventData['phone'];
+  }
+
   @override
   Widget build(BuildContext context) {
     final myHeightSizedBox = SizedBox(
@@ -55,7 +68,7 @@ class _AddEventPageState extends State<AddEventPage> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            'Add Event',
+                            'Edit Event',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 24),
                           ),
@@ -80,8 +93,7 @@ class _AddEventPageState extends State<AddEventPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
-                  child:
-                      textFormField('Title', titleController, false, 20, 1, 1),
+                  child: textFormField('Title', titleController, false, 20, 1),
                 ),
                 myHeightSizedBox,
                 Row(
@@ -98,8 +110,8 @@ class _AddEventPageState extends State<AddEventPage> {
                 Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
-                    child: textFormField('Description', descriptionController,
-                        false, 900, 1, 6)),
+                    child: textFormField(
+                        'Description', descriptionController, false, 900, 6)),
                 myHeightSizedBox,
                 Row(
                   children: [
@@ -116,7 +128,7 @@ class _AddEventPageState extends State<AddEventPage> {
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
                     child: textFormField(
-                        'Location', locationController, false, 20, 1, 1)),
+                        'Location', locationController, false, 20, 1)),
                 myHeightSizedBox,
                 myHeightSizedBox,
                 Row(
@@ -132,8 +144,7 @@ class _AddEventPageState extends State<AddEventPage> {
                 Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
-                    child:
-                        numTextFormField('Price', priceController, false, 4)),
+                    child: numTextFormField('Price', priceController, false)),
                 myHeightSizedBox,
                 Row(
                   children: [
@@ -148,8 +159,8 @@ class _AddEventPageState extends State<AddEventPage> {
                 Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
-                    child: phoneTextFormField(
-                        'Location', phoneController, false, 15)),
+                    child:
+                        phoneTextFormField('Location', phoneController, false)),
                 myHeightSizedBox,
                 myHeightSizedBox,
                 Row(
@@ -167,7 +178,7 @@ class _AddEventPageState extends State<AddEventPage> {
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
                     child: numTextFormField(
-                        'Max Participant', maxParticipantController, false, 4)),
+                        'Max Participant', maxParticipantController, false)),
                 myHeightSizedBox,
                 myHeightSizedBox,
                 Row(
@@ -184,7 +195,7 @@ class _AddEventPageState extends State<AddEventPage> {
                         horizontal: context.screenWidth * 0.159),
                     child: datePicker()),
                 myHeightSizedBox,
-                addButton()
+                editButton()
               ],
             ),
           ),
@@ -192,14 +203,14 @@ class _AddEventPageState extends State<AddEventPage> {
   }
 
   Material textFormField(String label, TextEditingController controller,
-      bool obscureText, int maxLength, int minLines, int maxLines) {
+      bool obscureText, int maxLength, int maxLines) {
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
-        maxLength: maxLength,
-        minLines: minLines,
+        minLines: 1,
         maxLines: maxLines,
+        maxLength: maxLength,
         obscureText: obscureText,
         validator: (value) {
           if (value!.isEmpty) {
@@ -229,13 +240,18 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 
-  Material numTextFormField(String label, TextEditingController controller,
-      bool obscureText, int maxLength) {
+  Material numTextFormField(
+    String label,
+    TextEditingController controller,
+    bool obscureText,
+  ) {
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
-        maxLength: maxLength,
+        maxLength: 4,
+        minLines: 1,
+        maxLines: 1,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly
         ],
@@ -270,13 +286,18 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 
-  Material phoneTextFormField(String label, TextEditingController controller,
-      bool obscureText, int maxLength) {
+  Material phoneTextFormField(
+    String label,
+    TextEditingController controller,
+    bool obscureText,
+  ) {
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
-        maxLength: maxLength,
+        maxLength: 15,
+        maxLines: 1,
+        minLines: 1,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly
         ],
@@ -311,31 +332,33 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 
-  InkWell addButton() {
+  InkWell editButton() {
     return InkWell(
       onTap: () async {
         if (formkey.currentState!.validate()) {
-          if (int.parse(maxParticipantController.text) <= 0) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Invalid max participant number')));
+          if (widget.eventData['activeParticipant'] >
+              int.parse(maxParticipantController.text)) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                    'You cannot have more active participant than max participant')));
             return;
           }
-
-          var currentUserData = await usermanager.getCurrentUser();
-          var url = currentUserData['profileURL'];
-          var result = await eventmanager.addEvent(
+          var result = await eventmanager.updateEvent(
+              widget.eventData['eventID'],
               titleController.text,
               descriptionController.text,
-              url,
               locationController.text,
               priceController.text,
-              int.parse(maxParticipantController.text),
-              dateController.text,
-              phoneController.text);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(result)));
+              phoneController.text,
+              maxParticipantController.text,
+              dateController.text);
           if (result == 'Success') {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(result)));
             Navigator.pushReplacementNamed(context, "/EventPage");
+          } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(result)));
           }
         }
       },
@@ -348,7 +371,7 @@ class _AddEventPageState extends State<AddEventPage> {
         height: 48,
         width: 225,
         child: const Text(
-          'Add Event',
+          'Edit Event',
           style: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
@@ -382,7 +405,7 @@ class _AddEventPageState extends State<AddEventPage> {
         controller: dateController,
         readOnly: true,
         decoration: InputDecoration(
-          icon: Icon(Icons.calendar_today),
+          icon: const Icon(Icons.calendar_today),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.transparent),
           ),
@@ -401,7 +424,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   Text text(String text) {
     return Text(text,
-        style: TextStyle(
+        style: const TextStyle(
             color: Color.fromRGBO(99, 109, 119, 1),
             fontSize: 16,
             fontWeight: FontWeight.w500));

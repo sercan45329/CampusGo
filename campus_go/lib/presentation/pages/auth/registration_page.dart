@@ -41,6 +41,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      left: context.screenWidth * 0.070,
+                      top: context.screenHeight * 0.050),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, "/LoginPage");
+                      },
+                      child: const Icon(Icons.arrow_back))),
+            ),
             const RegisterPic(),
             Row(
               children: [
@@ -175,13 +187,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return InkWell(
       onTap: () async {
         if (formkey.currentState!.validate()) {
+          if (!mailTextController.text.endsWith('@isik.edu.tr')) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('You should register with isik account')));
+            return;
+          }
           var result = await AuthService().register(
               nameTextController.text,
               mailTextController.text,
               passwordTextController.text,
               repasswordTextController.text);
           if (result == 'Registration Successful') {
-            Navigator.pushNamed(context, "/LoginPage");
+            Navigator.pushReplacementNamed(context, "/LoginPage");
           }
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(result!)));

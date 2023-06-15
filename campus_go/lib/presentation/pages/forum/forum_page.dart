@@ -27,7 +27,7 @@ class _ForumPageState extends State<ForumPage> {
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, "/AddPostPage");
+            Navigator.pushReplacementNamed(context, "/AddPostPage");
           },
           child: Container(
             decoration: const BoxDecoration(
@@ -65,7 +65,7 @@ class _ForumPageState extends State<ForumPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/ProfilePage");
+                  Navigator.pushReplacementNamed(context, "/ProfilePage");
                 },
                 child: FutureBuilder(
                     future: usermanager

@@ -24,6 +24,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         key: formkey,
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      left: context.screenWidth * 0.070,
+                      top: context.screenHeight * 0.070),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, "/LoginPage");
+                      },
+                      child: const Icon(Icons.arrow_back))),
+            ),
             const ForgotPasswordPic(),
             SizedBox(
               height: context.screenHeight * 0.05,
@@ -82,7 +94,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         if (formkey.currentState!.validate()) {
           var result = await AuthService().forgotPassword(mailController.text);
           if (result == 'Mail sent to reset your password' && context.mounted) {
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, "/LoginPage");
           }
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(result!)));

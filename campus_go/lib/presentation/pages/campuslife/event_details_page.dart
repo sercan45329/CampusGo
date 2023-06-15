@@ -1,5 +1,5 @@
-import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
+import 'package:campus_go/presentation/pages/campuslife/edit_event_page.dart';
 import 'package:campus_go/service/event_management.dart';
 import 'package:campus_go/service/user_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,14 +21,12 @@ class _EventDetailsPageState extends State<EventDetailsPage>
   late final _tabcontroller;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabcontroller = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    var participants = widget.data['participants'] as List<dynamic>;
     return Scaffold(
         floatingActionButton: Padding(
           padding: EdgeInsets.all(20.0),
@@ -68,7 +66,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
               decoration: const BoxDecoration(
                   color: Color.fromRGBO(52, 87, 199, 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              child: Padding(
+              child: const Padding(
                   padding: EdgeInsets.all(10.0), child: Icon(Icons.add)),
             ),
           ),
@@ -101,7 +99,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "/ProfilePage");
+                    Navigator.pushReplacementNamed(context, "/ProfilePage");
                   },
                   child: FutureBuilder(
                       future: usermanager
@@ -132,7 +130,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                       padding: EdgeInsets.only(
                           right: context.screenWidth * 0.050,
                           top: context.screenHeight * 0.050,
-                          left: context.screenWidth * 0.095),
+                          left: context.screenWidth * 0.075),
                       child: FutureBuilder(
                           future:
                               usermanager.getUserByID(widget.data['addedBy']),
@@ -162,14 +160,14 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                               return const CircularProgressIndicator();
                             }
                             return Text(
-                              'Name:${snapshot.data!['name']}',
-                              style: TextStyle(
+                              '${snapshot.data!['name']}',
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             );
                           }),
                       Text('Phone:${widget.data['phone']}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold)),
                       FutureBuilder(
@@ -185,7 +183,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                             var maxParticipants =
                                 snapshot.data!['maxParticipant'];
                             return Text('$activeParticipants/$maxParticipants',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold));
                           }),
@@ -211,22 +209,33 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                               .showSnackBar(SnackBar(content: Text(result)));
                         }
 
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, "/EventPage");
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('You dont have the permission!')));
                       }
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(25.0))),
-                      child: const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Icon(Icons.delete)),
-                    ),
+                    child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(Icons.delete)),
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: context.screenHeight * 0.050),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditEventPage(eventData: widget.data),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      )),
                 )
               ],
             ),
@@ -236,16 +245,16 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                   left: context.screenWidth * 0.050),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.location_on_sharp,
                   ),
                   Text('${widget.data['location']}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
-                  SizedBox(
+                  const SizedBox(
                     width: 40,
                   ),
-                  Icon(Icons.mail),
+                  const Icon(Icons.mail),
                   FutureBuilder(
                       future: usermanager.getUserByID(widget.data['addedBy']),
                       builder: (context, snapshot) {
@@ -255,14 +264,14 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                         }
                         return Text(
                           '${snapshot.data!['email']}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         );
                       })
                 ],
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Divider(
                 color: Colors.black,
@@ -270,9 +279,9 @@ class _EventDetailsPageState extends State<EventDetailsPage>
             ),
             Center(
                 child: Padding(
-                    padding: EdgeInsets.only(bottom: 15.0),
+                    padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text('${widget.data['title']}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             decoration: TextDecoration.underline,
                             color: Colors.white,
                             fontWeight: FontWeight.bold)))),
@@ -306,16 +315,21 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                             controller: _tabcontroller,
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(20.0),
                                 child: Container(
                                   decoration: const BoxDecoration(
                                       color: Colors.black,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(25.0))),
                                   child: Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Text('${widget.data['description']}',
-                                        style: TextStyle(color: Colors.white)),
+                                    padding: EdgeInsets.all(15.0),
+                                    child: Text(
+                                      '${widget.data['description']}',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -352,8 +366,8 @@ class _EventDetailsPageState extends State<EventDetailsPage>
             title: Center(
               child: Text(
                 'Name: ${snapshot.data['name']}\nEmail:${snapshot.data['email']}',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           );

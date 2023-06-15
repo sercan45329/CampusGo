@@ -2,7 +2,6 @@ import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:campus_go/service/event_management.dart';
 import 'package:campus_go/service/user_management.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../../data/constants/my_colors.dart';
 import 'event_details_page.dart';
@@ -16,14 +15,6 @@ class ViewAllPageCampusLife extends StatefulWidget {
 
 class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
   @override
-  bool _isDisposed = false;
-  @override
-  void dispose() {
-    _isDisposed = true;
-    // TODO: implement dispose
-    super.dispose();
-  }
-
   final usermanager = UserManagement();
   final eventmanager = EventManagement();
   var searchValue = "";
@@ -34,7 +25,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, "/AddEventPage");
+            Navigator.pushReplacementNamed(context, "/AddEventPage");
           },
           child: Container(
             decoration: BoxDecoration(
@@ -69,7 +60,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, "/ProfilePage");
+                Navigator.pushReplacementNamed(context, "/ProfilePage");
               },
               child: FutureBuilder(
                   future: usermanager
@@ -108,16 +99,11 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                     searchValue = value;
                   });
                 },
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                    hintText: "Search",
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.filter_alt),
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/FilterPage");
-                        },
-                        color: MyColors.applicationMustUsedBlue)),
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  hintText: "Search",
+                ),
               )),
         ),
         Align(
@@ -178,22 +164,19 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                   flex: 3,
                   child: Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Text(
-                        data!['title'],
-                        style: TextStyle(
+                        data['title'] + '/',
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        width: context.screenWidth * 0.35,
-                      ),
                       Text(
                         data['date'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
@@ -217,7 +200,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                               child: Center(
                                   child: Text(
                                 data['location'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 10),
@@ -242,7 +225,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                               child: Center(
                                   child: Text(
                                 data['price'].toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 10),
@@ -295,14 +278,24 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
       future: eventmanager.getAllPosts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         var list = snapshot.data;
+        if (list!.isEmpty) {
+          return Container();
+        }
         return ListView.separated(
-          itemCount: list!.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
             var data = snapshot.data![index];
-            return jobPostingCard(data);
+            if (data['title']
+                .toString()
+                .toLowerCase()
+                .startsWith(searchValue.toLowerCase())) {
+              return jobPostingCard(data);
+            }
+
+            return Container();
           },
           separatorBuilder: (context, index) {
             return const SizedBox(
