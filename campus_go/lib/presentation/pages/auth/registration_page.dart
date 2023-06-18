@@ -22,10 +22,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   void initState() {
     super.initState();
-    nameTextController.text = 'Your name here';
-    mailTextController.text = 'example@isik.edu.tr';
-    passwordTextController.text = '***************';
-    repasswordTextController.text = '***************';
   }
 
   @override
@@ -38,111 +34,114 @@ class _RegistrationPageState extends State<RegistrationPage> {
       resizeToAvoidBottomInset: false,
       body: Form(
         key: formkey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      left: context.screenWidth * 0.070,
-                      top: context.screenHeight * 0.050),
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, "/LoginPage");
-                      },
-                      child: const Icon(Icons.arrow_back))),
-            ),
-            const RegisterPic(),
-            Row(
-              children: [
-                SizedBox(
-                  width: context.screenWidth * 0.16,
-                ),
-                const Align(
-                    alignment: Alignment.centerLeft,
-                    child: RegisterText(text: 'Name')),
-              ],
-            ),
-            myHeightSizedBox,
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: context.screenWidth * 0.159),
-              child: textFormField('Your name here', nameTextController, false),
-            ),
-            myHeightSizedBox,
-            Row(
-              children: [
-                SizedBox(
-                  width: context.screenWidth * 0.16,
-                ),
-                const Align(
-                    alignment: Alignment.centerLeft,
-                    child: RegisterText(text: 'Email')),
-              ],
-            ),
-            myHeightSizedBox,
-            Padding(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        left: context.screenWidth * 0.070,
+                        top: context.screenHeight * 0.050),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, "/LoginPage");
+                        },
+                        child: const Icon(Icons.arrow_back))),
+              ),
+              const RegisterPic(),
+              Row(
+                children: [
+                  SizedBox(
+                    width: context.screenWidth * 0.16,
+                  ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: RegisterText(text: 'Name')),
+                ],
+              ),
+              myHeightSizedBox,
+              Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.159),
-                child: textFormField(
-                    'example@isik.edu.tr', mailTextController, false)),
-            myHeightSizedBox,
-            Row(
-              children: [
-                SizedBox(
-                  width: context.screenWidth * 0.16,
-                ),
-                const Align(
-                    alignment: Alignment.centerLeft,
-                    child: RegisterText(text: 'Password')),
-              ],
-            ),
-            myHeightSizedBox,
-            Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.screenWidth * 0.159),
-                child: textFormField(
-                    '***************', passwordTextController, true)),
-            myHeightSizedBox,
-            Row(
-              children: [
-                SizedBox(
-                  width: context.screenWidth * 0.16,
-                ),
-                const Align(
-                    alignment: Alignment.centerLeft,
-                    child: RegisterText(text: 'Confirm Password')),
-              ],
-            ),
-            myHeightSizedBox,
-            Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.screenWidth * 0.159),
-                child: textFormField(
-                    '***************', repasswordTextController, true)),
-            SizedBox(
-              height: context.screenHeight * 0.030,
-            ),
-            registerSignUp(),
-            SizedBox(
-              height: context.screenHeight * 0.030,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Already have account? "),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, "/LoginPage");
-                  },
-                  child: Text('Sign In',
-                      style:
-                          TextStyle(color: MyColors.applicationMustUsedBlue)),
-                )
-              ],
-            )
-          ],
+                child:
+                    textFormField('Your name here', nameTextController, false),
+              ),
+              myHeightSizedBox,
+              Row(
+                children: [
+                  SizedBox(
+                    width: context.screenWidth * 0.16,
+                  ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: RegisterText(text: 'Email')),
+                ],
+              ),
+              myHeightSizedBox,
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.screenWidth * 0.159),
+                  child: textFormField(
+                      'example@isik.edu.tr', mailTextController, false)),
+              myHeightSizedBox,
+              Row(
+                children: [
+                  SizedBox(
+                    width: context.screenWidth * 0.16,
+                  ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: RegisterText(text: 'Password')),
+                ],
+              ),
+              myHeightSizedBox,
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.screenWidth * 0.159),
+                  child: textFormField(
+                      '***************', passwordTextController, true)),
+              myHeightSizedBox,
+              Row(
+                children: [
+                  SizedBox(
+                    width: context.screenWidth * 0.16,
+                  ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: RegisterText(text: 'Confirm Password')),
+                ],
+              ),
+              myHeightSizedBox,
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.screenWidth * 0.159),
+                  child: textFormField(
+                      '***************', repasswordTextController, true)),
+              SizedBox(
+                height: context.screenHeight * 0.030,
+              ),
+              registerSignUp(),
+              SizedBox(
+                height: context.screenHeight * 0.030,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Already have account? "),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, "/LoginPage");
+                    },
+                    child: Text('Sign In',
+                        style:
+                            TextStyle(color: MyColors.applicationMustUsedBlue)),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -167,6 +166,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         },
         controller: controller,
         decoration: InputDecoration(
+          hintText: label,
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.transparent),
           ),

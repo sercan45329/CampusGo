@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               top: context.screenHeight * 0.050),
                           child: Text(
                             "${data!['name']}'s Profile",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 24),
                           )),
                     ],
@@ -150,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 30),
+                        padding: const EdgeInsets.only(left: 30),
                         child: Icon(
                           Icons.mail,
                           color: MyColors.applicationMustUsedBlue,

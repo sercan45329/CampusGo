@@ -42,119 +42,124 @@ class _AddPostPageState extends State<AddPostPage> {
         resizeToAvoidBottomInset: false,
         body: Form(
           key: formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: context.screenWidth * 0.050,
-                          top: context.screenHeight * 0.050),
-                      child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, "/ForumPage");
-                          },
-                          child: const Icon(Icons.arrow_back))),
-                  Expanded(
-                    child: Padding(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Padding(
                         padding: EdgeInsets.only(
-                            left: context.screenWidth * 0.250,
+                            left: context.screenWidth * 0.050,
                             top: context.screenHeight * 0.050),
-                        child: const Text(
-                          'Add Post',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24),
-                        )),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(alignment: Alignment.centerLeft, child: text('Title')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.screenWidth * 0.159),
-                child: textFormField('Title', titleController, false, 1, 1, 35),
-              ),
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: text('Description')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
+                        child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context, "/ForumPage");
+                            },
+                            child: const Icon(Icons.arrow_back))),
+                    Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              left: context.screenWidth * 0.250,
+                              top: context.screenHeight * 0.050),
+                          child: const Text(
+                            'Add Post',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24),
+                          )),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft, child: text('Title')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
-                  child: textFormField(
-                      'Description', descriptionController, false, 6, 1, 450)),
-              myHeightSizedBox,
-              Row(
-                children: [
-                  SizedBox(
-                    width: context.screenWidth * 0.16,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft, child: text('Category')),
-                ],
-              ),
-              myHeightSizedBox,
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.screenWidth * 0.159),
-                child: Material(
-                  elevation: 6,
-                  borderRadius: BorderRadius.circular(10),
-                  child: DropdownButton(
-                    underline: const SizedBox(),
-                    hint: const Text("Select"),
-                    dropdownColor: Colors.white,
-                    isExpanded: true,
-                    value: category,
-                    icon: const Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colors.black,
+                  child:
+                      textFormField('Title', titleController, false, 1, 1, 35),
+                ),
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
                     ),
-                    items: categories.map((String item) {
-                      return DropdownMenuItem(
-                        value: item,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            item,
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 17),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: text('Description')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.159),
+                    child: textFormField('Description', descriptionController,
+                        false, 6, 1, 450)),
+                myHeightSizedBox,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: context.screenWidth * 0.16,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: text('Category')),
+                  ],
+                ),
+                myHeightSizedBox,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.screenWidth * 0.159),
+                  child: Material(
+                    elevation: 6,
+                    borderRadius: BorderRadius.circular(10),
+                    child: DropdownButton(
+                      underline: const SizedBox(),
+                      hint: const Text("Select"),
+                      dropdownColor: Colors.white,
+                      isExpanded: true,
+                      value: category,
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.black,
+                      ),
+                      items: categories.map((String item) {
+                        return DropdownMenuItem(
+                          value: item,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              item,
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 17),
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        category = newValue!;
-                      });
-                    },
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          category = newValue!;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: context.screenHeight * 0.025,
-              ),
-              addButton()
-            ],
+                SizedBox(
+                  height: context.screenHeight * 0.025,
+                ),
+                addButton()
+              ],
+            ),
           ),
         ));
   }

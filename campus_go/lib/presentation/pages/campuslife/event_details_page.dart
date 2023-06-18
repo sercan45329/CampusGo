@@ -40,6 +40,13 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                 return;
               }
 
+              if (usermanager.getCurrentUserID() == dataa['addedBy']) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        'You cannot participate the event that you created')));
+                return;
+              }
+
               var docRef =
                   await eventmanager.getEventDocRefByID(widget.data['eventID']);
               if ((dataa['participants'] as List<dynamic>)
@@ -190,53 +197,51 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: context.screenHeight * 0.050,
-                      left: context.screenWidth * 0.095),
-                  child: GestureDetector(
-                    onTap: () async {
-                      var result;
-                      if (widget.data['addedBy'] ==
-                          usermanager.getCurrentUserID()) {
-                        result = await eventmanager
-                            .deleteEvent(widget.data['eventID']);
-                        if (result != 'Success') {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(result)));
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(result)));
-                        }
-
-                        Navigator.pushReplacementNamed(context, "/EventPage");
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('You dont have the permission!')));
-                      }
-                    },
-                    child: const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(Icons.delete)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: context.screenHeight * 0.050),
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EditEventPage(eventData: widget.data),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                        color: Colors.black,
-                      )),
-                )
+                (widget.data['addedBy'] == usermanager.getCurrentUserID())
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            top: context.screenHeight * 0.050,
+                            left: context.screenWidth * 0.095),
+                        child: GestureDetector(
+                          onTap: () async {
+                            var result = await eventmanager
+                                .deleteEvent(widget.data['eventID']);
+                            if (result == 'Success') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(result)));
+                              Navigator.pushReplacementNamed(
+                                  context, "/EventPage");
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(result)));
+                            }
+                          },
+                          child: const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(Icons.delete)),
+                        ),
+                      )
+                    : Container(),
+                (widget.data['addedBy'] == usermanager.getCurrentUserID())
+                    ? Padding(
+                        padding:
+                            EdgeInsets.only(top: context.screenHeight * 0.050),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditEventPage(eventData: widget.data),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                            )),
+                      )
+                    : Container()
               ],
             ),
             Padding(
@@ -363,12 +368,10 @@ class _EventDetailsPageState extends State<EventDetailsPage>
               radius: 25,
               backgroundImage: NetworkImage(snapshot.data!['profileURL']!),
             ),
-            title: Center(
-              child: Text(
-                'Name: ${snapshot.data['name']}\nEmail:${snapshot.data['email']}',
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-              ),
+            title: Text(
+              'Name: ${snapshot.data['name']}\nEmail:${snapshot.data['email']}',
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
             ),
           );
         });

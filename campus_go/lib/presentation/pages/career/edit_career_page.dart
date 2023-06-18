@@ -132,7 +132,7 @@ class _EditCareerPageState extends State<EditCareerPage> {
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
                     child: textFormField(
-                        'Company Mail', companyMailController, false, 20, 1)),
+                        'Company Mail', companyMailController, false, 25, 1)),
                 myHeightSizedBox,
                 Row(
                   children: [
@@ -149,7 +149,7 @@ class _EditCareerPageState extends State<EditCareerPage> {
                     padding: EdgeInsets.symmetric(
                         horizontal: context.screenWidth * 0.159),
                     child: textFormField(
-                        'Location', locationController, false, 20, 1)),
+                        'Location', locationController, false, 15, 1)),
                 myHeightSizedBox,
                 myHeightSizedBox,
                 Row(
