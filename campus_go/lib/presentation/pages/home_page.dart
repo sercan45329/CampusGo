@@ -1,12 +1,8 @@
 import 'package:campus_go/data/constants/my_colors.dart';
 import 'package:campus_go/data/constants/phone_screen.dart';
 import 'package:campus_go/service/user_management.dart';
-import 'package:campus_go/widgets/nav_Bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-
 import 'package:campus_go/widgets/home_page_widgets/home_pic.dart';
-import 'package:campus_go/widgets/home_page_widgets/home_text.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,10 +19,10 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: MyColors.appBackground,
       body: Column(
         children: [
-          SizedBox(height: 30.0),
+          const SizedBox(height: 30.0),
           Row(
             children: [
-              Padding(padding: EdgeInsets.only(left: 30)),
+              const Padding(padding: EdgeInsets.only(left: 30)),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, "/ProfilePage");
@@ -56,12 +52,12 @@ class _HomePageState extends State<HomePage> {
                       "Hi, $name",
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 18.0,
+                        fontSize: 15.0,
                         fontWeight: FontWeight.bold,
                       ),
                     );
                   }),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               const Icon(
                 Icons.waving_hand,
                 color: Colors.yellow,

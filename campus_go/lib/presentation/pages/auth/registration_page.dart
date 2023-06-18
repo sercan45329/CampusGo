@@ -65,8 +65,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.screenWidth * 0.159),
-                child:
-                    textFormField('Your name here', nameTextController, false),
+                child: textFormField(
+                    25, 'Your name here', nameTextController, false),
               ),
               myHeightSizedBox,
               Row(
@@ -84,7 +84,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
                   child: textFormField(
-                      'example@isik.edu.tr', mailTextController, false)),
+                      25, 'example@isik.edu.tr', mailTextController, false)),
               myHeightSizedBox,
               Row(
                 children: [
@@ -101,7 +101,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
                   child: textFormField(
-                      '***************', passwordTextController, true)),
+                      50, '***************', passwordTextController, true)),
               myHeightSizedBox,
               Row(
                 children: [
@@ -118,7 +118,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: context.screenWidth * 0.159),
                   child: textFormField(
-                      '***************', repasswordTextController, true)),
+                      50, '***************', repasswordTextController, true)),
               SizedBox(
                 height: context.screenHeight * 0.030,
               ),
@@ -147,12 +147,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  Material textFormField(
-      String label, TextEditingController controller, bool obscureText) {
+  Material textFormField(int maxLength, String label,
+      TextEditingController controller, bool obscureText) {
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(10),
       child: TextFormField(
+        maxLength: maxLength,
         obscureText: obscureText,
         validator: (value) {
           if (value!.isEmpty) {

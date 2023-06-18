@@ -7,7 +7,6 @@ class Filter {
   ];
   static List<String> selectedCategoryData = [];
 
-  static remove(String data) {}
   static select(String data) {
     if (selectedCategoryData.isEmpty) {
       selectedCategoryData.add(data);

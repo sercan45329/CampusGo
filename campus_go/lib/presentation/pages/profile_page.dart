@@ -60,10 +60,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: const Icon(Icons.arrow_back))),
                       Padding(
                           padding: EdgeInsets.only(
-                              left: context.screenWidth * 0.150,
+                              left: context.screenWidth * 0.300,
                               top: context.screenHeight * 0.050),
                           child: Text(
-                            "${data!['name']}'s Profile",
+                            "Profile",
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 24),
                           )),
@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           CircleAvatar(
                               radius: 100,
                               backgroundImage:
-                                  NetworkImage(data['profileURL'])),
+                                  NetworkImage(data!['profileURL'])),
                           Positioned(
                               right: 5,
                               bottom: 5,
