@@ -107,7 +107,7 @@ class JobManagement {
   Future<List<Map<String, dynamic>>> getRecentJobs(int count) async {
     List<Map<String, dynamic>> list = [];
     var snapshot =
-        await _jobCollection.orderBy("dateCreated", descending: false).get();
+        await _jobCollection.orderBy("dateCreated", descending: true).get();
     var docs = snapshot.docs;
     for (var i = 0; i < count; i++) {
       var data = docs[i].data();
