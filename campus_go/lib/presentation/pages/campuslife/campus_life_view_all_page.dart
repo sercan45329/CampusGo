@@ -126,6 +126,10 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
   GestureDetector jobPostingCard(Map<String, dynamic>? data) {
     var maxParticipant = data!['maxParticipant'];
     var activeParticipant = data['activeParticipant'];
+    var location = data['location'];
+    if (location.length > 7) {
+      location = location.substring(0, 7) + '...';
+    }
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacement(
@@ -199,7 +203,7 @@ class _ViewAllPageCampusLifeState extends State<ViewAllPageCampusLife> {
                               width: context.screenWidth * 0.15,
                               child: Center(
                                   child: Text(
-                                data['location'],
+                                location,
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

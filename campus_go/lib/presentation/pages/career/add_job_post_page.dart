@@ -531,9 +531,10 @@ class _AddJobPostPageState extends State<AddJobPostPage> {
             Navigator.pushReplacementNamed(context, "/CareerPage");
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(result)));
+          } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(result)));
           }
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(result)));
         }
       },
       child: Container(
